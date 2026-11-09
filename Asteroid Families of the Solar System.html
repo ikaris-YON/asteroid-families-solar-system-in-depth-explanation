@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asteroid Families of the Solar System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* One visual world: night sky. Amber accent echoes the classic Kirkwood histogram. */
+  --ink:#0a0e1a;
+  --panel:#111829;
+  --panel-2:#172036;
+  --rule:#26304b;
+  --text:#e8ebf4;
+  --muted:#9ba6c2;
+  --accent:#f2b04a;
+  --accent-2:#7fb6ff;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:dark;
+  /* layout: a reading column of ~68ch with full-width interactive panels */
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ink);color:var(--text)}
+body{font-family:var(--body);font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-2)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.prose{max-width:70ch}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(2.1rem,4.6vw,3.4rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:.6rem}
+h3{font-size:1.25rem;margin:1.6rem 0 .4rem}
+p{margin:.65rem 0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header.top{padding:48px 0 26px;border-bottom:1px solid var(--rule)}
+.lede{font-size:1.12rem;color:var(--muted);max-width:66ch;margin-top:14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:26px}
+.fact{border-left:2px solid var(--accent);padding:4px 0 4px 12px}
+.fact b{display:block;font-family:var(--mono);font-size:1.15rem;font-weight:500;color:var(--text)}
+.fact span{font-size:.86rem;color:var(--muted)}
+nav.toc{position:sticky;top:0;z-index:20;background:rgba(10,14,26,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px;scrollbar-width:none}
+nav.toc a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:.86rem;padding:5px 10px;border-radius:6px}
+nav.toc a:hover{color:var(--text);background:var(--panel-2)}
+nav.toc a .n{font-family:var(--mono);color:var(--accent);margin-right:6px;font-size:.78rem}
+section{padding:54px 0 30px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:.78rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.widget{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px;margin:22px 0}
+.widget-head{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.widget-title{font-weight:600;font-size:.98rem}
+.hint{font-size:.84rem;color:var(--muted)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.seg button{border:0;border-right:1px solid var(--rule);background:transparent;color:var(--muted);padding:6px 11px;font:500 .84rem var(--body);cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#1a1205}
+.btn{border:1px solid var(--rule);background:var(--panel-2);color:var(--text);padding:6px 12px;border-radius:7px;font:500 .84rem var(--body);cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:#1a1205;border-color:var(--accent)}
+label.rng{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--muted)}
+input[type=range]{accent-color:var(--accent);width:150px}
+canvas{display:block;width:100%;border-radius:6px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:18px;align-items:start}
+.grid2.even{grid-template-columns:1fr 1fr}
+@media (max-width:860px){.grid2,.grid2.even{grid-template-columns:1fr}}
+.side{font-size:.92rem}
+.side h3{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);background:transparent;color:var(--text);padding:4px 9px;border-radius:999px;font:500 .8rem var(--body);cursor:pointer}
+.chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.chip[aria-pressed="false"]{opacity:.42}
+.chip.sel{border-color:var(--accent);background:var(--panel-2)}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:10px}
+.readout div{background:var(--panel-2);border-radius:7px;padding:7px 10px}
+.readout small{display:block;color:var(--muted);font-size:.74rem}
+.readout b{font-family:var(--mono);font-weight:500;font-size:1rem}
+.pill{display:inline-block;font:600 .74rem var(--mono);padding:2px 8px;border-radius:999px;background:var(--accent);color:#1a1205;vertical-align:middle}
+.card{background:var(--panel-2);border:1px solid var(--rule);border-radius:9px;padding:14px 16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:18px 0}
+.cards .card h3{margin:0 0 6px;font-size:1.12rem}
+.cards .card p{font-size:.9rem;margin:.4rem 0}
+.cards .card .meta{font-family:var(--mono);font-size:.76rem;color:var(--accent)}
+.famcard h3{margin:0 0 4px}
+.famcard dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:.86rem;margin:8px 0}
+.famcard dt{color:var(--muted)}
+.famcard dd{margin:0;font-family:var(--mono)}
+.famlist{display:flex;flex-wrap:wrap;gap:5px;max-height:none}
+.formula{font-family:var(--mono);background:var(--panel-2);border-left:2px solid var(--accent);padding:10px 14px;margin:12px 0;overflow-x:auto;font-size:.9rem;white-space:nowrap}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;margin:16px 0}
+th,td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{position:sticky;top:0;background:var(--panel-2);font-weight:600;cursor:pointer;white-space:nowrap;user-select:none}
+th[aria-sort]::after{content:" ↕";color:var(--muted)}
+th[aria-sort="ascending"]::after{content:" ↑";color:var(--accent)}
+th[aria-sort="descending"]::after{content:" ↓";color:var(--accent)}
+td.num,th.num{text-align:right}
+tbody tr:hover{background:var(--panel-2)}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.steps{counter-reset:s;display:grid;gap:8px;margin:10px 0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:8px;font-size:.88rem;padding:6px 8px;border-radius:7px;opacity:.55}
+.steps li::before{content:counter(s);font-family:var(--mono);color:var(--accent);border:1px solid var(--rule);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:.78rem}
+.steps li.on{opacity:1;background:var(--panel-2)}
+.bars{display:grid;gap:7px;margin-top:8px}
+.bar{display:grid;grid-template-columns:150px 1fr 48px;gap:8px;align-items:center;font-size:.84rem}
+.bar .track{height:12px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.bar .fill{height:100%;border-radius:3px;transition:width .35s}
+.bar .v{font-family:var(--mono);text-align:right}
+.note{font-size:.82rem;color:var(--muted)}
+.callout{border:1px solid var(--rule);border-left:3px solid var(--accent-2);padding:10px 14px;border-radius:6px;background:var(--panel);margin:16px 0;font-size:.93rem}
+dl.gloss{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:8px 18px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+@media (max-width:600px){dl.gloss{grid-template-columns:1fr}.bar{grid-template-columns:110px 1fr 44px}}
+footer{padding:30px 0 60px;color:var(--muted);font-size:.86rem}
+.sources li{margin:4px 0}
+.tip{position:fixed;pointer-events:none;background:#0d1322;border:1px solid var(--rule);padding:6px 9px;border-radius:6px;font-size:.8rem;z-index:50;display:none;max-width:260px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="tip" id="tip"></div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="kicker">Small bodies of the Solar System</div>
+    <h1>Asteroid families, and every place small worlds live</h1>
+    <p class="lede">An asteroid family is the debris of one shattered or cratered parent body, still travelling on similar orbits millions to billions of years later. This guide walks outward from the Sun: near-Earth asteroids, the main belt and its families, the Hildas and Trojans, the Kuiper belt and the Oort cloud. Every figure on the page can be played with.</p>
+    <div class="facts">
+      <div class="fact"><b>40,000+</b><span>near-Earth asteroids known (ESA milestone, Nov 2025)</span></div>
+      <div class="fact"><b>100+</b><span>collisional families identified in the main belt</span></div>
+      <div class="fact"><b>1</b><span>confirmed collisional family in the Kuiper belt (Haumea)</span></div>
+      <div class="fact"><b>~10<sup>11</sup>–10<sup>12</sup></b><span>comets estimated in the Oort cloud</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <div class="wrap">
+    <a href="#map"><span class="n">01</span>Map</a>
+    <a href="#resonances"><span class="n">02</span>Resonances</a>
+    <a href="#families"><span class="n">03</span>What a family is</a>
+    <a href="#explorer"><span class="n">04</span>Family explorer</a>
+    <a href="#finding"><span class="n">05</span>Finding families</a>
+    <a href="#ageing"><span class="n">06</span>Ageing &amp; dating</a>
+    <a href="#nea"><span class="n">07</span>Near-Earth asteroids</a>
+    <a href="#outer"><span class="n">08</span>Beyond the belt</a>
+    <a href="#oort"><span class="n">09</span>Oort cloud</a>
+    <a href="#glossary"><span class="n">10</span>Glossary</a>
+  </div>
+</nav>
+
+<!-- 01 MAP -->
+<section id="map">
+  <div class="wrap">
+    <div class="kicker">01 · The reservoirs</div>
+    <h2>Where small bodies live</h2>
+    <div class="prose">
+      <p>Small bodies are not spread evenly. They sit in a handful of reservoirs, each shaped by the gravity of the giant planets. Some regions are stable for the age of the Solar System; others are leaky and constantly drain into new ones. Use the three scales below. In the inner view, switch to <b>rotating with Jupiter</b> and watch the Hildas fold into a triangle and the Trojans gather at two points 60° ahead of and behind the planet.</p>
+    </div>
+    <div class="widget">
+      <div class="widget-head">
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Scale">
+            <button id="mv-inner" aria-pressed="true">Inner system · 0–6 AU</button>
+            <button id="mv-outer" aria-pressed="false">Giant planets &amp; Kuiper belt · 0–100 AU</button>
+            <button id="mv-oort" aria-pressed="false">To the Oort cloud · log scale</button>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Reference frame" id="frame-seg">
+            <button id="fr-in" aria-pressed="true">Fixed stars</button>
+            <button id="fr-rot" aria-pressed="false">Rotating with <span id="fr-planet">Jupiter</span></button>
+          </div>
+          <button class="btn" id="map-play">Pause</button>
+          <label class="rng" for="map-speed">Speed <input type="range" id="map-speed" min="0.2" max="6" step="0.1" value="1"></label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div>
+          <canvas id="map-canvas" aria-label="Animated map of small-body populations"></canvas>
+          <div class="hint" id="map-time" style="margin-top:6px"></div>
+        </div>
+        <div class="side">
+          <div class="chips" id="map-legend"></div>
+          <div id="mapnote-inner">
+            <h3>Inner Solar System</h3>
+            <p><b>Near-Earth asteroids</b> have perihelion q &lt; 1.3 AU. Their orbits last only a few million years before they hit the Sun, a planet, or are thrown out, so the population is steadily resupplied from the main belt.</p>
+            <p><b>Hungarias</b> (1.78–2.0 AU) sit inside the belt at high inclination (16–34°), protected from Mars by tilt. <b>The main belt</b> (2.1–3.3 AU) holds most asteroids, cut into inner, middle and outer zones by Jupiter resonances. <b>Cybeles</b> (3.3–3.7 AU) lie just outside the 2:1 resonance.</p>
+            <p><b>Hildas</b> (≈3.97 AU) make exactly 3 orbits for every 2 of Jupiter's. <b>Jupiter Trojans</b> share Jupiter's orbit around the L4 and L5 Lagrange points; L4 (leading) holds noticeably more of them than L5.</p>
+          </div>
+          <div id="mapnote-outer" hidden>
+            <h3>Giant planets to the Kuiper belt</h3>
+            <p><b>Centaurs</b> wander between Jupiter and Neptune on orbits that last only a few million years. They are Kuiper belt objects on their way to becoming Jupiter-family comets.</p>
+            <p><b>Plutinos</b> (39.4 AU) orbit twice for every three Neptune orbits, the same 3:2 lock Pluto has. In Neptune's rotating frame their perihelia always avoid Neptune. <b>Twotinos</b> sit in the 2:1 at 47.8 AU.</p>
+            <p><b>Classical Kuiper belt</b> objects (≈42–48 AU) come in two kinds: a dynamically <i>cold</i>, low-inclination, red, binary-rich group thought to have formed in place (Arrokoth is one), and a <i>hot</i> group with larger inclinations. The <b>scattered disk</b> has perihelia near Neptune and long, eccentric orbits.</p>
+          </div>
+          <div id="mapnote-oort" hidden>
+            <h3>Out to the Oort cloud</h3>
+            <p>Radius here is logarithmic: every ring is ten times farther than the one inside it. The planets crowd into the centre. Hover to read distances.</p>
+            <p>The <b>inner (Hills) cloud</b> spans roughly 2,000–20,000 AU and the <b>outer Oort cloud</b> about 20,000 to beyond 100,000 AU, where the Sun's grip weakens against the Galaxy's tide. No Oort cloud object has been seen in place: we infer it from long-period comets falling inward on nearly parabolic orbits.</p>
+            <p><b>Detached objects</b> such as Sedna (perihelion ≈76 AU) never come close to Neptune and point to something that shaped the outer Solar System long ago, perhaps the Sun's birth cluster.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 RESONANCES -->
+<section id="resonances">
+  <div class="wrap">
+    <div class="kicker">02 · Jupiter's fingerprints</div>
+    <h2>Why the belt has gaps and walls</h2>
+    <div class="prose">
+      <p>In 1866 Daniel Kirkwood noticed that almost no asteroids have periods that are simple fractions of Jupiter's 11.86 years. These <b>mean-motion resonances</b> (MMRs) are written as p:q: an asteroid in the 3:1 resonance orbits three times for each Jupiter orbit. Because the pattern repeats, Jupiter tugs the asteroid at the same points of its orbit again and again, and the small kicks add up instead of cancelling.</p>
+      <p>The resonance location follows from Kepler's third law: <span class="num">a = a<sub>J</sub> (q/p)<sup>2/3</sup></span>, with <span class="num">a<sub>J</sub> = 5.20 AU</span>. In strong resonances such as 3:1, 5:2 and 2:1 the motion is chaotic and the eccentricity is pumped until the orbit crosses Mars or Earth. That removes asteroids and is the main delivery route for near-Earth asteroids and meteorites.</p>
+      <p>There is a second kind: <b>secular resonances</b>, where the slow precession of an asteroid's orbit matches a planet's precession. The <b>ν6</b> resonance (perihelion precession matching Saturn's, <span class="num">g = g6</span>) forms the inner edge of the main belt near 2.1 AU and curves to higher inclinations further out. It is the single biggest supplier of near-Earth asteroids.</p>
+    </div>
+
+    <div class="widget">
+      <div class="widget-head">
+        <div class="widget-title">Distribution of semimajor axis, with resonances marked</div>
+        <div class="hint">Synthetic sample built to match the real belt's shape. Hover for bin values.</div>
+      </div>
+      <canvas id="hist-canvas"></canvas>
+    </div>
+
+    <div class="widget">
+      <div class="widget-head">
+        <div class="widget-title">See a resonance: an asteroid's path as Jupiter sees it</div>
+        <div class="controls">
+          <button class="btn" data-snap="3:1">3:1</button>
+          <button class="btn" data-snap="5:2">5:2</button>
+          <button class="btn" data-snap="7:3">7:3</button>
+          <button class="btn" data-snap="2:1">2:1</button>
+          <button class="btn" data-snap="3:2">3:2 (Hildas)</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <canvas id="rose-canvas"></canvas>
+        <div class="side">
+          <p>The orbit is drawn in a frame that turns with Jupiter (the dot at the top), over 40 asteroid orbits. Amber dots mark every <b>conjunction</b>, the moment the asteroid passes Jupiter.</p>
+          <p>Off resonance, conjunctions spread all the way around, so Jupiter's pulls average out. On resonance the path closes on itself and conjunctions land on the same <span class="num">p − q</span> spots every time.</p>
+          <label class="rng" for="rose-a">a (AU) <input type="range" id="rose-a" min="1.9" max="4.4" step="0.001" value="2.62"></label>
+          <label class="rng" for="rose-e">e <input type="range" id="rose-e" min="0" max="0.4" step="0.01" value="0.15"></label>
+          <div class="readout">
+            <div><small>Semimajor axis</small><b id="rose-ra">–</b></div>
+            <div><small>Period ratio P<sub>J</sub>/P</small><b id="rose-rp">–</b></div>
+            <div><small>Status</small><b id="rose-rs">–</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 FAMILIES -->
+<section id="families">
+  <div class="wrap">
+    <div class="kicker">03 · The core idea</div>
+    <h2>What makes an asteroid family</h2>
+    <div class="prose">
+      <p>In 1918 the Japanese astronomer Kiyotsugu Hirayama found that some asteroids share almost identical orbits once you strip away the wobbles caused by the planets. He named the first groups after their largest members: <b>Koronis, Eos and Themis</b>. He proposed they were fragments of broken bodies. A century of data has confirmed it.</p>
+      <h3>How families form</h3>
+      <p><b>Catastrophic disruption.</b> A projectile hits hard enough to shatter the parent, and the largest remnant keeps less than half its mass. Koronis, Eos and Themis are of this kind. The fragments leave at speeds of tens to a few hundred metres per second, tiny compared with orbital speeds near 18 km/s, so they stay on neighbouring orbits.</p>
+      <p><b>Cratering.</b> A big crater blasts out fragments while the parent survives almost whole. Vesta's family came mostly from the Rheasilvia basin, about 1 billion years ago. Its fragments are basaltic (V-type), which is why we can link the HED meteorites on Earth to Vesta.</p>
+      <p><b>Rotational fission and pairs.</b> Sunlight (the YORP effect) can spin a small asteroid up until it splits. This makes <i>asteroid pairs</i> and tiny clusters only thousands to a few million years old.</p>
+      <h3>Proper elements: the fingerprint</h3>
+      <p>The everyday orbit you look up, the <b>osculating elements</b>, changes from week to week as the planets pull on it. Family members' osculating orbits drift apart in phase and quickly look unrelated. <b>Proper elements</b> (a<sub>p</sub>, e<sub>p</sub>, sin i<sub>p</sub>) average those oscillations out. They stay nearly constant for hundreds of millions of years, so they preserve the family's original clustering. Toggle between the two views below.</p>
+    </div>
+
+    <div class="widget">
+      <div class="widget-head">
+        <div class="widget-title">Outer belt, osculating vs proper elements</div>
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Element type">
+            <button id="op-osc" aria-pressed="true">Osculating (what you look up)</button>
+            <button id="op-pro" aria-pressed="false">Proper (averaged)</button>
+          </div>
+          <div class="seg" role="group" aria-label="Projection">
+            <button id="op-ae" aria-pressed="true">a – e</button>
+            <button id="op-ai" aria-pressed="false">a – sin i</button>
+          </div>
+        </div>
+      </div>
+      <canvas id="op-canvas"></canvas>
+      <p class="hint">Same asteroids in both views. The osculating eccentricity of each body is its proper eccentricity plus a <i>forced</i> part from Jupiter, combined at a random phase, so the clumps smear out. Switch to proper elements and Koronis, Eos, Themis, Hygiea and Veritas reappear.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 EXPLORER -->
+<section id="explorer">
+  <div class="wrap">
+    <div class="kicker">04 · The main belt in proper elements</div>
+    <h2>Family explorer</h2>
+    <div class="prose">
+      <p>This map follows the layout of the plots you have seen in the literature: proper semimajor axis against proper eccentricity or inclination. Click a family name or a point to read about it. <b>Colour by taxonomy</b> to see that most families share one composition: Vesta's fragments are basaltic V-types, Eos is K-type, Themis is carbonaceous, while the background is mixed. That compositional unity is the strongest evidence that members are siblings.</p>
+    </div>
+    <div class="widget">
+      <div class="widget-head">
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Axes">
+            <button data-ax="ae" aria-pressed="true">a – e</button>
+            <button data-ax="as" aria-pressed="false">a – sin i</button>
+            <button data-ax="es" aria-pressed="false">e – sin i</button>
+          </div>
+          <div class="seg" role="group" aria-label="Colour">
+            <button data-col="fam" aria-pressed="true">By family</button>
+            <button data-col="tax" aria-pressed="false">By taxonomy</button>
+            <button data-col="none" aria-pressed="false">Unlabelled</button>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn" id="ex-clear">Clear selection</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <div>
+          <canvas id="ex-canvas"></canvas>
+          <div class="chips" id="ex-taxlegend" hidden></div>
+          <div class="hint">Dashed lines: Jupiter resonances. In a – sin i the curved line is the ν6 secular resonance. In a – e the curve is the Mars-crossing limit, q = 1.666 AU.</div>
+        </div>
+        <div class="side">
+          <div class="card famcard" id="ex-card">
+            <h3>Pick a family</h3>
+            <p class="hint">Choose from the list or click any coloured point.</p>
+          </div>
+          <div class="famlist chips" id="ex-list" style="margin-top:12px"></div>
+        </div>
+      </div>
+      <p class="note">Plotted points are a synthetic sample generated around published proper-element centres and spreads, thinned for speed. Member counts and ages are rounded, and they vary between catalogues and clustering cut-offs.</p>
+    </div>
+
+    <h3>Families at a glance</h3>
+    <div class="tablewrap"><table id="fam-table"><thead></thead><tbody></tbody></table></div>
+    <div class="prose">
+      <h3>The belt, zone by zone</h3>
+      <p><b>Inner belt (2.1–2.5 AU)</b>, between ν6 and the 3:1. Home of Vesta, Flora, Nysa–Polana, Massalia, Baptistina and Erigone. It is the nearest reservoir to Earth, so its families dominate meteorite falls. The dark Polana and Eulalia families are the likely sources of Bennu and Ryugu, the asteroids sampled by OSIRIS-REx and Hayabusa2.</p>
+      <p><b>Middle belt (2.5–2.82 AU)</b>, between 3:1 and 5:2. Eunomia, Maria, Gefion, Adeona, Juno, Dora and the steeply tilted Pallas family.</p>
+      <p><b>"Pristine zone" (2.82–2.96 AU)</b>, between 5:2 and 7:3. Few big resonances cross it, so fewer bodies drift in from outside. Koronis lives here, with the 5.8-million-year-old Karin cluster nested inside it.</p>
+      <p><b>Outer belt (2.96–3.28 AU)</b>, out to the 2:1. Large, mostly dark families: Eos, Themis, Hygiea, Ursula, Veritas and Alauda. Several Themis members show comet-like activity (main-belt comets), and ice has been detected on (24) Themis itself.</p>
+      <p><b>A notable absence:</b> Ceres, the largest body in the belt, has no detectable family. Its icy crust may have absorbed or masked fragments, or they may be too dark and small to see yet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 FINDING -->
+<section id="finding">
+  <div class="wrap">
+    <div class="kicker">05 · Method</div>
+    <h2>How families are found: hierarchical clustering</h2>
+    <div class="prose">
+      <p>The standard tool is the <b>Hierarchical Clustering Method</b> (HCM; Zappalà et al. 1990). It measures the "distance" between two asteroids in proper elements as the velocity kick that would move one orbit into the other:</p>
+    </div>
+    <div class="formula">d = n a √( 5/4 (δa/a)² + 2 (δe)² + 2 (δ sin i)² )   [m/s]</div>
+    <div class="prose">
+      <p>Here n a is the orbital speed. Two asteroids are linked if d is below a <b>cut-off velocity</b> v<sub>c</sub>, and a family is any chain of linked bodies above a minimum size. Choosing v<sub>c</sub> is the hard part. Too small and real families break into pieces. Too large and families chain together through the background into one blob. Drag the slider and watch both failures happen.</p>
+    </div>
+    <div class="widget">
+      <div class="widget-head">
+        <div class="controls">
+          <label class="rng" for="hcm-v">Cut-off v<sub>c</sub> <input type="range" id="hcm-v" min="15" max="260" step="1" value="70"> <b class="num" id="hcm-vv">70 m/s</b></label>
+          <div class="seg" role="group" aria-label="Projection">
+            <button data-hp="ae" aria-pressed="true">a – e</button>
+            <button data-hp="as" aria-pressed="false">a – sin i</button>
+          </div>
+          <div class="seg" role="group" aria-label="Truth">
+            <button id="hcm-found" aria-pressed="true">HCM result</button>
+            <button id="hcm-truth" aria-pressed="false">True membership</button>
+          </div>
+        </div>
+      </div>
+      <div class="grid2">
+        <canvas id="hcm-canvas"></canvas>
+        <div class="side">
+          <div class="readout">
+            <div><small>Groups ≥ 15 members</small><b id="hcm-n">–</b></div>
+            <div><small>Largest group</small><b id="hcm-big">–</b></div>
+          </div>
+          <h3>Recovery of the planted families</h3>
+          <div class="tablewrap"><table id="hcm-table"><thead><tr><th>Family</th><th class="num">Found</th><th class="num">Interlopers</th></tr></thead><tbody></tbody></table></div>
+          <p class="note"><i>Found</i>: share of true members in the best-matching group. <i>Interlopers</i>: share of that group that are background bodies or members of another family.</p>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Real catalogues add more checks. Interlopers are flagged by <b>colour and albedo</b> (from SDSS, WISE/NEOWISE and Gaia DR3 spectra): a bright S-type inside a dark C-type family is probably a background object. The <b>size distribution</b> and the <b>V-shape</b> in the next section help decide whether a cluster is a real family. Newer methods use machine learning and spectral data together with orbits.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 AGEING -->
+<section id="ageing">
+  <div class="wrap">
+    <div class="kicker">06 · Time</div>
+    <h2>How families spread, and how we date them</h2>
+    <div class="prose">
+      <p>A spinning asteroid absorbs sunlight and re-emits it as heat in a slightly different direction. That tiny recoil, the <b>Yarkovsky effect</b>, slowly changes the semimajor axis. Prograde spinners drift outward, retrograde spinners drift inward, and small bodies drift faster because the force scales with area while mass scales with volume. A related torque, <b>YORP</b>, changes the spin and tends to push spin axes toward the extremes, which makes the drift steadier.</p>
+      <p>Plot each member's semimajor axis against 1/D and a family takes the shape of a <b>V</b>. Its opening angle grows with age. That makes the V a clock: older families have wider Vs. Move the slider.</p>
+    </div>
+    <div class="widget">
+      <div class="widget-head">
+        <div class="controls">
+          <label class="rng" for="yk-age">Family age <input type="range" id="yk-age" min="0" max="2500" step="5" value="400"> <b class="num" id="yk-agev">400 Myr</b></label>
+          <button class="btn primary" id="yk-play">Play</button>
+        </div>
+        <div class="hint">Illustrative family centred at 2.40 AU, between the ν6 edge and the 3:1 resonance.</div>
+      </div>
+      <div class="grid2">
+        <canvas id="yk-canvas"></canvas>
+        <div class="side">
+          <div class="readout">
+            <div><small>Still in family</small><b id="yk-in">–</b></div>
+            <div><small>Lost into 3:1</small><b id="yk-31">–</b></div>
+            <div><small>Lost into ν6</small><b id="yk-n6">–</b></div>
+          </div>
+          <p>Fragments that reach a resonance wall are removed and start the journey toward near-Earth space (section 07). Families near a resonance are therefore steady sources of NEAs and meteorites, and the smallest members leave first.</p>
+          <p>The dashed V shows the maximum drift for spin axes perpendicular to the orbit. Fitting that envelope to a real family gives its age.</p>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <h3>Other clocks</h3>
+      <p><b>Backward integration.</b> For families only a few million years old, the slowly precessing orbits of members can be run backward until they line up. Karin's members converge 5.75 million years ago (Nesvorný et al. 2002). Veritas converges about 8.3 million years ago and matches a spike of extraterrestrial dust (helium-3) in late Miocene ocean sediments. The tiny Datura cluster is only about 450,000 years old.</p>
+      <p><b>Space weathering.</b> Solar wind and micrometeorites slowly redden and darken S-type surfaces, so the colours of young families are fresher.</p>
+      <p><b>Crater counts</b> on the parent (Vesta's Rheasilvia basin, seen by NASA's Dawn) give an independent date.</p>
+      <div class="callout"><b>Families and meteorites.</b> Studies published in <i>Nature</i> in 2024 traced most ordinary chondrite meteorites to a few young families: the Massalia family for L chondrites, and the Karin and Koronis families for H chondrites. Young families still hold many small fragments, which is why they dominate the meteorite supply.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 NEA -->
+<section id="nea">
+  <div class="wrap">
+    <div class="kicker">07 · Near-Earth space</div>
+    <h2>Near-Earth asteroids: the belt's overflow</h2>
+    <div class="prose">
+      <p>A near-Earth asteroid (NEA) is one with perihelion distance <span class="num">q &lt; 1.3 AU</span>. NEAs are not a family; they are a transient population fed mainly by the main belt. A NEA typically survives a few million years, ten at most, before it falls into the Sun, hits a planet, or is flung out by Jupiter. To keep their numbers steady, the main belt has to keep resupplying them through resonances.</p>
+      <p>They are divided by orbit into four classes, named after a prototype of each (with perihelion q = a(1 − e) and aphelion Q = a(1 + e)):</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="meta">a &lt; 1 AU · Q &lt; 0.983 AU</div><h3>Atiras</h3><p>Orbits entirely inside Earth's. Hard to find because they are always in the twilight sky. The rarer <b>Vatiras</b> stay inside Venus's orbit too (Q &lt; 0.718 AU); 'Ayló'chaxnim (2020 AV2) was the first found.</p></div>
+      <div class="card"><div class="meta">a &lt; 1 AU · Q &gt; 0.983 AU</div><h3>Atens</h3><p>Earth-crossing, but with periods under one year, so they spend most of their time inside Earth's orbit. Apophis is an Aten.</p></div>
+      <div class="card"><div class="meta">a &gt; 1 AU · q &lt; 1.017 AU</div><h3>Apollos</h3><p>Earth-crossing with periods over a year. The largest class, and the home of most potentially hazardous asteroids. Bennu, Ryugu, Itokawa, Didymos and Phaethon are Apollos.</p></div>
+      <div class="card"><div class="meta">1.017 &lt; q &lt; 1.3 AU</div><h3>Amors</h3><p>Approach Earth's orbit from outside without crossing it today. Many cross Mars's orbit. Eros, the first NEA found (1898), is an Amor.</p></div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-head">
+        <div class="widget-title">Orbit classifier</div>
+        <div class="controls" id="nea-presets"></div>
+      </div>
+      <div class="grid2 even">
+        <div>
+          <canvas id="orb-canvas"></canvas>
+          <div class="controls" style="margin-top:8px">
+            <label class="rng" for="orb-a">a (AU) <input type="range" id="orb-a" min="0.45" max="5.4" step="0.005" value="1.126"></label>
+            <label class="rng" for="orb-e">e <input type="range" id="orb-e" min="0" max="0.97" step="0.001" value="0.204"></label>
+            <label class="rng" for="orb-i">i (°) <input type="range" id="orb-i" min="0" max="60" step="0.1" value="6"></label>
+          </div>
+        </div>
+        <div class="side">
+          <div style="margin-bottom:6px"><span class="pill" id="orb-class">Apollo</span> <span id="orb-name" class="hint"></span></div>
+          <div class="readout">
+            <div><small>Perihelion q</small><b id="orb-q">–</b></div>
+            <div><small>Aphelion Q</small><b id="orb-Q">–</b></div>
+            <div><small>Period</small><b id="orb-P">–</b></div>
+            <div><small>Tisserand T<sub>J</sub></small><b id="orb-T">–</b></div>
+          </div>
+          <p id="orb-desc" style="margin-top:10px"></p>
+          <p class="note">The <b>Tisserand parameter</b> T<sub>J</sub> = a<sub>J</sub>/a + 2 cos i √((a/a<sub>J</sub>)(1 − e²)) is nearly conserved during encounters with Jupiter. T<sub>J</sub> &gt; 3 is typical of asteroids, 2 &lt; T<sub>J</sub> &lt; 3 of Jupiter-family comets, and T<sub>J</sub> &lt; 2 of long-period and Halley-type comets.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>Where NEAs come from</h3>
+      <p>Granvik et al. (2018) fitted a model of the NEA population to survey data and traced each NEA back to one of seven escape routes: the ν6, 3:1, 5:2 and 2:1 resonances, the Hungaria and Phocaea regions, and Jupiter-family comets. The share from each route depends strongly on size. Large NEAs come from many routes, while the smallest come almost entirely from the nearby inner-belt routes (ν6, 3:1 and Hungaria).</p>
+    </div>
+    <div class="widget">
+      <div class="widget-head">
+        <div class="widget-title">NEA orbits in the a – e plane, and their sources</div>
+        <div class="controls">
+          <button class="btn primary" id="jr-play">Play: journey of a fragment</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <div>
+          <canvas id="nea-canvas"></canvas>
+          <div class="chips" id="nea-src"></div>
+          <p class="note">Points are a synthetic population drawn source by source, in the proportions of the H &lt; 17.5 model. The white cross is the orbit set in the classifier above. Named NEAs are shown as labelled rings.</p>
+        </div>
+        <div class="side">
+          <ol class="steps" id="jr-steps">
+            <li><span><b>Yarkovsky drift.</b> A fragment of an inner-belt family creeps outward over tens of millions of years.</span></li>
+            <li><span><b>Captured by the 3:1.</b> Jupiter's repeated kicks pump the eccentricity within about a million years. Once q drops below 1.3 AU it is a NEA.</span></li>
+            <li><span><b>Planetary encounters.</b> With q below Earth's orbit, close passes by Earth and Venus scatter its semimajor axis back and forth.</span></li>
+            <li><span><b>The end.</b> Most NEAs are driven into the Sun or thrown out by Jupiter. Only a few percent hit a planet.</span></li>
+          </ol>
+          <h3>Share of NEAs by source (Granvik et al. 2018)</h3>
+          <div class="seg" role="group" aria-label="Size limit">
+            <button data-h="0" aria-pressed="true">H &lt; 17.5 (≳1 km)</button>
+            <button data-h="1" aria-pressed="false">H &lt; 21 (≳200 m)</button>
+            <button data-h="2" aria-pressed="false">H &lt; 25 (≳35 m)</button>
+          </div>
+          <div class="bars" id="src-bars"></div>
+          <p class="note">Percent of NEAs brighter than the stated absolute magnitude H. Sizes assume albedo 0.14. Values are rounded, so columns do not sum to exactly 100; Jupiter-family comets supply the remaining one or two percent.</p>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <h3>Planetary defence</h3>
+      <p>A <b>potentially hazardous asteroid</b> (PHA) has a minimum orbit intersection distance with Earth under 0.05 AU and H &lt; 22 (roughly larger than 140 m). NASA's DART spacecraft hit Dimorphos, the moon of Didymos, in September 2022 and shortened its orbit around Didymos by about 33 minutes. ESA's <b>Hera</b> is due to begin close operations at Didymos in December 2026 to measure the result in detail. Apophis will pass Earth at about 32,000 km on 13 April 2029, inside the ring of geostationary satellites, and NASA's OSIRIS-APEX will follow it. NASA's NEO Surveyor infrared telescope is being built to find dark NEAs that ground surveys miss.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 OUTER -->
+<section id="outer">
+  <div class="wrap">
+    <div class="kicker">08 · Past the 2:1 resonance</div>
+    <h2>Beyond the main belt</h2>
+    <div class="prose">
+      <p>Families are not limited to the main belt. Wherever bodies are numerous enough to collide, they can form, and resonances outside the belt hold their own populations. Use the buttons to jump to each group on the map.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="meta">≈1.5 AU · Mars L4/L5</div><h3>Mars Trojans</h3><p>A handful of bodies share Mars's orbit. Most at L5 cluster around (5261) Eureka and look like a tiny family, likely formed by YORP spin-off rather than a collision. Several are olivine-rich.</p></div>
+      <div class="card"><div class="meta">1.78–2.0 AU · i 16–34°</div><h3>Hungarias</h3><p>Dominated by the Hungaria family of bright enstatite (E-type) asteroids. Close to Mars, they leak steadily into near-Earth space and are a major source of small NEAs.</p><button class="btn" data-goto="inner:hun">Show on map</button></div>
+      <div class="card"><div class="meta">3.3–3.7 AU</div><h3>Cybeles</h3><p>A sparse group beyond the 2:1, bounded by the 5:3 and 7:4 resonances. Mostly primitive dark types; (87) Sylvia with its two moons is the best known.</p><button class="btn" data-goto="inner:cyb">Show on map</button></div>
+      <div class="card"><div class="meta">3.97 AU · 3:2 with Jupiter</div><h3>Hildas</h3><p>Locked in a 3:2 resonance, they never get close to Jupiter: in Jupiter's frame they trace a triangle with corners at L3, L4 and L5. Two collisional families are known here, Hilda and Schubart. Dark D- and P-types.</p><button class="btn" data-goto="inner:hil">Show on map</button></div>
+      <div class="card"><div class="meta">5.2 AU · Jupiter L4/L5</div><h3>Jupiter Trojans</h3><p>Over ten thousand known, librating around Jupiter's L4 and L5 points. They likely were captured from the outer disk when the giant planets migrated. Several families exist, the best known being Eurybates (L4) and Ennomos (L5). NASA's Lucy spacecraft flies past Eurybates and its moon Queta in August 2027.</p><button class="btn" data-goto="inner:tro">Show on map</button></div>
+      <div class="card"><div class="meta">5–30 AU · short-lived</div><h3>Centaurs</h3><p>Escapees from the Kuiper belt and scattered disk on unstable orbits among the giant planets, with lifetimes of a few million years. Some show comet activity (Chiron); Chariklo has rings. Many end as Jupiter-family comets.</p><button class="btn" data-goto="outer:cen">Show on map</button></div>
+      <div class="card"><div class="meta">≈30 AU · Neptune L4/L5</div><h3>Neptune Trojans</h3><p>Dozens known, and possibly more numerous than Jupiter's Trojans. Many have high inclinations, a clue that they were captured during Neptune's migration.</p><button class="btn" data-goto="outer:ntr">Show on map</button></div>
+      <div class="card"><div class="meta">30–50 AU · Kuiper belt</div><h3>Kuiper belt</h3><p>Resonant objects (plutinos at 3:2, twotinos at 2:1), a cold classical belt formed in place, a hot classical belt, and the scattered disk. Pluto, Eris, Makemake, Haumea and Arrokoth live here.</p><button class="btn" data-goto="outer:clc">Show on map</button></div>
+      <div class="card"><div class="meta">a ≈ 43 AU · i ≈ 28°</div><h3>The Haumea family</h3><p>The only confirmed collisional family in the Kuiper belt. About ten bodies share Haumea's orbit and its nearly pure water-ice surface. Haumea spins in under four hours and has a ring and two moons, all consistent with a giant impact long ago. The family's velocity spread is unexpectedly small, which still puzzles modellers.</p><button class="btn" data-goto="outer:hau">Show on map</button></div>
+      <div class="card"><div class="meta">Planetary moons</div><h3>Irregular satellite families</h3><p>The small, distant, often retrograde moons of the giant planets fall into tight groups with similar orbits and colours: Jupiter's Himalia, Ananke and Carme groups, and Saturn's Inuit, Gallic and Norse groups. Each group is probably the debris of one captured moon broken by a collision.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 OORT -->
+<section id="oort">
+  <div class="wrap">
+    <div class="kicker">09 · The far edge</div>
+    <h2>The Oort cloud, comets and interstellar visitors</h2>
+    <div class="prose">
+      <p>In 1950 Jan Oort noticed that many long-period comets arrive with semimajor axes of tens of thousands of AU, the "Oort spike". He proposed a vast spherical swarm of icy bodies surrounding the Solar System. These bodies were not born there. They formed among the giant planets and were scattered outward, and passing stars and the Galaxy's tide then lifted their perihelia so they never returned. The same forces now occasionally nudge one back inward as a new long-period comet.</p>
+      <p>The cloud is thought to contain hundreds of billions to a trillion kilometre-sized comets, yet with a total mass of perhaps a few Earth masses. It may reach a third of the way to Proxima Centauri. Some of its members may have been captured from other stars in the Sun's birth cluster.</p>
+      <h3>Do comets form families?</h3>
+      <p>Not in the collisional sense, because comets rarely collide. But they do fragment. The <b>Kreutz sungrazers</b> are hundreds of pieces of one great comet that broke up near the Sun, and meteor showers trace the debris trails of single comets and asteroids, such as the Geminids from (3200) Phaethon. Jupiter-family comets share Jupiter-controlled orbits (2 &lt; T<sub>J</sub> &lt; 3) but are a dynamical class, not siblings.</p>
+      <h3>Interstellar objects</h3>
+      <p>Three objects from other star systems have been seen passing through: 1I/ʻOumuamua (2017), the comet 2I/Borisov (2019), and the comet 3I/ATLAS (2025). Their hyperbolic orbits (e &gt; 1) show they are unbound to the Sun. If other stars eject their small bodies this freely, the Oort clouds of neighbouring stars may overlap with ours.</p>
+    </div>
+    <div class="widget">
+      <div class="widget-head">
+        <div class="widget-title">The whole hierarchy, end to end</div>
+        <button class="btn" data-goto="oort:">Open the log-scale map</button>
+      </div>
+      <div class="tablewrap" style="margin:0"><table>
+        <thead><tr><th>Population</th><th>Typical a / distance</th><th>Controlled by</th><th>Families?</th></tr></thead>
+        <tbody>
+          <tr><td>Vatiras &amp; Atiras</td><td class="num">0.4–1 AU</td><td>Venus, Earth encounters</td><td>No, transient</td></tr>
+          <tr><td>Atens, Apollos, Amors</td><td class="num">0.6–4 AU, q &lt; 1.3</td><td>Planet encounters, resonances</td><td>No, transient; a few genetic pairs</td></tr>
+          <tr><td>Hungarias</td><td class="num">1.78–2.0 AU</td><td>Mars, ν6, ν16</td><td>Yes (Hungaria)</td></tr>
+          <tr><td>Main belt</td><td class="num">2.1–3.3 AU</td><td>Jupiter MMRs, ν6</td><td>Yes, over 100</td></tr>
+          <tr><td>Cybeles</td><td class="num">3.3–3.7 AU</td><td>2:1, 5:3, 7:4</td><td>A few small ones</td></tr>
+          <tr><td>Hildas</td><td class="num">≈3.97 AU</td><td>3:2 with Jupiter</td><td>Yes (Hilda, Schubart)</td></tr>
+          <tr><td>Jupiter Trojans</td><td class="num">≈5.2 AU</td><td>1:1 with Jupiter</td><td>Yes (Eurybates, Ennomos, others)</td></tr>
+          <tr><td>Centaurs</td><td class="num">5–30 AU</td><td>Giant-planet encounters</td><td>No, transient</td></tr>
+          <tr><td>Kuiper belt</td><td class="num">30–50 AU</td><td>Neptune MMRs</td><td>One confirmed (Haumea)</td></tr>
+          <tr><td>Scattered &amp; detached</td><td class="num">50–1,000+ AU</td><td>Neptune; unknown for detached</td><td>None known</td></tr>
+          <tr><td>Oort cloud</td><td class="num">2,000–100,000+ AU</td><td>Galactic tide, passing stars</td><td>None known</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 GLOSSARY -->
+<section id="glossary">
+  <div class="wrap">
+    <div class="kicker">10 · Reference</div>
+    <h2>Glossary</h2>
+    <dl class="gloss">
+      <dt>Semimajor axis a</dt><dd>Half the long axis of the orbit; sets the period through Kepler's third law, P (years) = a<sup>1.5</sup> (AU).</dd>
+      <dt>Eccentricity e</dt><dd>How stretched the ellipse is: 0 is a circle, near 1 is very elongated.</dd>
+      <dt>Inclination i</dt><dd>Tilt of the orbit to the ecliptic. Family plots use sin i.</dd>
+      <dt>q and Q</dt><dd>Perihelion a(1 − e) and aphelion a(1 + e) distances.</dd>
+      <dt>Osculating elements</dt><dd>The instantaneous Keplerian orbit; it changes as planets perturb the body.</dd>
+      <dt>Proper elements</dt><dd>Elements with periodic perturbations averaged out; quasi-constant over long times, used to find families.</dd>
+      <dt>Mean-motion resonance</dt><dd>Orbital periods in a simple ratio p:q with a planet's, so perturbations repeat and add up.</dd>
+      <dt>Secular resonance</dt><dd>Precession rate of an asteroid's perihelion (g) or node (s) matching a planet's; ν6 is g = g6, ν16 is s = s6.</dd>
+      <dt>Yarkovsky effect</dt><dd>Thermal recoil that slowly changes the semimajor axis of small bodies.</dd>
+      <dt>YORP effect</dt><dd>Thermal torque that changes spin rate and spin-axis direction; can spin bodies up until they split.</dd>
+      <dt>HCM</dt><dd>Hierarchical Clustering Method; links asteroids closer than a cut-off velocity in proper elements.</dd>
+      <dt>Taxonomic class</dt><dd>Spectral type: S (stony, silicate), C (carbonaceous, dark), V (basaltic, Vesta-like), X (mixed, includes metal-rich M and enstatite E), K, B, D/P (very dark, red, outer Solar System).</dd>
+      <dt>Tisserand parameter T<sub>J</sub></dt><dd>A near-invariant during Jupiter encounters used to separate asteroid-like from comet-like orbits.</dd>
+      <dt>PHA</dt><dd>Potentially hazardous asteroid: MOID &lt; 0.05 AU and H &lt; 22.</dd>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap prose">
+    <p><b>About the plots.</b> Interactive scatter plots and histograms on this page use synthetic samples generated around published proper-element centres, widths, resonance positions and source fractions, so they reproduce the real structure without loading a catalogue. For the real data, use the AstDyS proper-element catalogue, the PDS asteroid family catalogue, or the JPL Small-Body Database.</p>
+    <h3>Sources</h3>
+    <ul class="sources">
+      <li>Granvik, M. et al. (2018). Debiased orbit and absolute-magnitude distributions for near-Earth objects. <i>Icarus</i> 312, 181–207. <a href="https://www.arxiv.org/abs/1804.10265">arXiv:1804.10265</a></li>
+      <li>Source fractions by H, from Granvik et al. (2018) as tabulated in Binzel et al. / MANOS. <a href="https://arxiv.org/pdf/1909.04788">arXiv:1909.04788</a></li>
+      <li>Nesvorný, D., Brož, M. &amp; Carruba, V. (2015). Identification and dynamical properties of asteroid families. In <i>Asteroids IV</i>, Univ. Arizona Press.</li>
+      <li>Zappalà, V. et al. (1990). Asteroid families I: identification by hierarchical clustering. <i>Astron. J.</i> 100.</li>
+      <li>Nesvorný, D. et al. (2002). The recent breakup of an asteroid in the main-belt region. <i>Nature</i> 417.</li>
+      <li>Marsset, M. et al. (2024); Brož, M. et al. (2024). Young families as sources of ordinary chondrites. <i>Nature</i> 634.</li>
+      <li>ESA (Nov 2025). 40 000 near-Earth asteroids discovered. <a href="https://watchers.news/epicenter/astronomers-identify-40-000th-near-earth-asteroid-marking-major-milestone-in-planetary-defense/">report</a></li>
+      <li>NASA. Lucy mission confirms discovery of Eurybates satellite. <a href="https://www.nasa.gov/missions/lucy/nasas-lucy-mission-confirms-discovery-of-eurybates-satellite/">nasa.gov</a></li>
+      <li>ESA. Hera and the Didymos system. <a href="https://www.esa.int/ESA_Multimedia/Images/2025/08/Hera_and_asteroid_Otero_at_time_of_observation">esa.int</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+"use strict";
+/* ---------- utilities ---------- */
+const TAU=Math.PI*2, DEG=Math.PI/180, AJ=5.2026;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function gaussFn(r){let sp=null;return function(){if(sp!==null){const s=sp;sp=null;return s;}let u,v,s;do{u=r()*2-1;v=r()*2-1;s=u*u+v*v;}while(s>=1||s===0);const m=Math.sqrt(-2*Math.log(s)/s);sp=v*m;return u*m;};}
+const COL={text:'#e8ebf4',muted:'#9ba6c2',rule:'#26304b',panel:'#111829',panel2:'#172036',ink:'#0a0e1a',accent:'#f2b04a',accent2:'#7fb6ff'};
+const resA=(p,q)=>AJ*Math.pow(q/p,2/3);
+const RES=[[4,1],[7,2],[3,1],[8,3],[5,2],[7,3],[9,4],[2,1],[5,3],[3,2],[4,3]].map(([p,q])=>({p,q,label:p+':'+q,a:resA(p,q)}));
+const RESMAP=Object.fromEntries(RES.map(r=>[r.label,r]));
+const GAPW={'4:1':0.006,'7:2':0.004,'3:1':0.017,'8:3':0.004,'5:2':0.012,'7:3':0.008,'9:4':0.004,'2:1':0.032};
+function inGap(a,e){for(const k in GAPW){if(Math.abs(a-RESMAP[k].a)<GAPW[k]*(1+3*e))return true;}return false;}
+function nu6S(a){ if(a<=2.05) return 0; if(a<=2.5) return 0.27*Math.pow((a-2.05)/0.45,0.75); return 0.27+(a-2.5)*0.6; }
+function niceTicks(a,b,n){const span=b-a,raw=span/n,mag=Math.pow(10,Math.floor(Math.log10(raw)));const f=raw/mag;const step=(f<1.5?1:f<3?2:f<7?5:10)*mag;const out=[];for(let v=Math.ceil(a/step-1e-9)*step;v<=b+1e-9;v+=step)out.push(+v.toFixed(10));return {ticks:out,step};}
+function fmtTick(v,step){const d=Math.max(0,-Math.floor(Math.log10(step)+1e-9));return v.toFixed(d);}
+const tip=$('#tip');
+function showTip(html,x,y){tip.innerHTML=html;tip.style.display='block';const w=tip.offsetWidth;tip.style.left=Math.min(window.innerWidth-w-8,x+14)+'px';tip.style.top=(y+14)+'px';}
+function hideTip(){tip.style.display='none';}
+
+class Frame{
+  constructor(cv,o){this.cv=cv;this.o=Object.assign({aspect:0.62,m:{l:56,r:14,t:14,b:42},minH:260,maxH:640},o);this.fit();}
+  fit(){const cv=this.cv,dpr=window.devicePixelRatio||1;const w=cv.clientWidth||cv.parentNode.clientWidth||600;let asp=this.o.aspect;if(w<520)asp*=1.2;const h=Math.round(clamp(w*asp,this.o.minH,this.o.maxH));
+    cv.style.height=h+'px';cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);this.ctx=cv.getContext('2d');this.ctx.setTransform(dpr,0,0,dpr,0,0);this.W=w;this.H=h;const m=this.o.m;this.l=m.l;this.t=m.t;this.pw=w-m.l-m.r;this.ph=h-m.t-m.b;}
+  dom(x,y){this.x=x;this.y=y;}
+  X(v){return this.l+(v-this.x[0])/(this.x[1]-this.x[0])*this.pw}
+  Y(v){return this.t+this.ph-(v-this.y[0])/(this.y[1]-this.y[0])*this.ph}
+  iX(p){return this.x[0]+(p-this.l)/this.pw*(this.x[1]-this.x[0])}
+  iY(p){return this.y[0]+(this.t+this.ph-p)/this.ph*(this.y[1]-this.y[0])}
+  inside(px,py){return px>=this.l&&px<=this.l+this.pw&&py>=this.t&&py<=this.t+this.ph}
+  axes(xl,yl,nx=7,ny=5){const c=this.ctx;c.clearRect(0,0,this.W,this.H);c.fillStyle='#0d1323';c.fillRect(this.l,this.t,this.pw,this.ph);
+    c.font='11px "IBM Plex Mono", monospace';c.fillStyle=COL.muted;c.strokeStyle='rgba(120,135,175,.13)';c.lineWidth=1;
+    const xt=niceTicks(this.x[0],this.x[1],nx),yt=niceTicks(this.y[0],this.y[1],ny);
+    c.textAlign='center';c.textBaseline='top';
+    for(const v of xt.ticks){const px=Math.round(this.X(v))+.5;c.beginPath();c.moveTo(px,this.t);c.lineTo(px,this.t+this.ph);c.stroke();c.fillText(fmtTick(v,xt.step),px,this.t+this.ph+6);}
+    c.textAlign='right';c.textBaseline='middle';
+    for(const v of yt.ticks){const py=Math.round(this.Y(v))+.5;c.beginPath();c.moveTo(this.l,py);c.lineTo(this.l+this.pw,py);c.stroke();c.fillText(fmtTick(v,yt.step),this.l-6,py);}
+    c.font='12px "IBM Plex Sans", sans-serif';c.fillStyle=COL.muted;c.textAlign='center';c.textBaseline='bottom';c.fillText(xl,this.l+this.pw/2,this.H-4);
+    c.save();c.translate(13,this.t+this.ph/2);c.rotate(-Math.PI/2);c.textBaseline='middle';c.fillText(yl,0,0);c.restore();}
+  clip(){const c=this.ctx;c.save();c.beginPath();c.rect(this.l,this.t,this.pw,this.ph);c.clip();}
+  unclip(){this.ctx.restore();}
+}
+function onResize(el,fn){let to;const ro=new ResizeObserver(()=>{clearTimeout(to);to=setTimeout(fn,60);});ro.observe(el);}
+function segBind(btns,fn){btns.forEach(b=>b.addEventListener('click',()=>{btns.forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));fn(b);}));}
+
+/* ---------- family data ---------- */
+const TAX={S:{c:'#ff5c8a',n:'S (stony)'},C:{c:'#45c7f0',n:'C (carbonaceous)'},B:{c:'#4f7dff',n:'B (blue-dark)'},V:{c:'#ffe14d',n:'V (basaltic)'},X:{c:'#6fd17a',n:'X (incl. M, P)'},K:{c:'#a07cff',n:'K'},E:{c:'#e3e7f0',n:'E (enstatite)'},L:{c:'#ff9d4d',n:'L'}};
+const FAM=[
+ {id:'hun',name:'Hungaria',num:434,a:1.94,e:0.075,s:0.36,sa:.04,se:.014,ss:.014,mem:2900,tax:'E',age:'≈0.2–0.5 Gyr',zone:'Hungaria region',col:'#d7dcea',note:'Bright enstatite (E-type) bodies, linked to aubrite meteorites. Leaks steadily into near-Earth space, especially at small sizes.'},
+ {id:'flo',name:'Flora',num:8,a:2.21,e:0.145,s:0.085,sa:.035,se:.012,ss:.012,mem:13800,tax:'S',age:'≈1 Gyr',zone:'Inner belt',col:'#ff8fb1',note:'Huge, diffuse S-type family right against the ν6 resonance. A major source of LL-chondrite-like NEAs.'},
+ {id:'bap',name:'Baptistina',num:298,a:2.27,e:0.15,s:0.10,sa:.028,se:.006,ss:.004,mem:2500,tax:'X',age:'≈0.1–0.3 Gyr',zone:'Inner belt',col:'#ffb347',note:'Once proposed (2007) as the source of the dinosaur-killing Chicxulub impactor; later infrared data on its members made that link unlikely.'},
+ {id:'ves',name:'Vesta',num:4,a:2.36,e:0.099,s:0.115,sa:.05,se:.011,ss:.006,mem:15000,tax:'V',age:'≈1 Gyr',zone:'Inner belt',col:'#ffe066',note:'Cratering family from the Rheasilvia impact basin on Vesta. Basaltic V-type fragments; source of the HED meteorites. Its spread is cut sharply by the 3:1 resonance at 2.50 AU.'},
+ {id:'nys',name:'Nysa–Polana',num:44,a:2.36,e:0.172,s:0.05,sa:.06,se:.011,ss:.008,mem:19000,tax:'C',age:'≈0.8–1.5 Gyr',zone:'Inner belt',col:'#e0605a',note:'An overlapping complex: dark Polana and Eulalia families plus bright Nysa members. Polana or Eulalia are the likely birthplaces of Bennu and Ryugu.'},
+ {id:'mas',name:'Massalia',num:20,a:2.41,e:0.162,s:0.025,sa:.026,se:.005,ss:.003,mem:6400,tax:'S',age:'≈0.15 Gyr',zone:'Inner belt',col:'#5e86ff',note:'Young cratering family at low inclination. Identified in 2024 as the main source of L-chondrite meteorites.'},
+ {id:'eri',name:'Erigone',num:163,a:2.37,e:0.21,s:0.09,sa:.022,se:.006,ss:.004,mem:1800,tax:'C',age:'≈0.3 Gyr',zone:'Inner belt',col:'#a585ff',note:'Primitive carbonaceous family; a plausible source of some dark NEAs.'},
+ {id:'pho',name:'Phocaea',num:25,a:2.36,e:0.205,s:0.39,sa:.05,se:.02,ss:.018,mem:1250,tax:'S',age:'≈2 Gyr',zone:'Phocaea region (high i)',col:'#ff6fd8',note:'High-inclination group above ν6, isolated from the inner belt. Contributes large NEAs but almost no small ones.'},
+ {id:'mar',name:'Maria',num:170,a:2.56,e:0.10,s:0.25,sa:.035,se:.01,ss:.008,mem:2900,tax:'S',age:'≈3 Gyr',zone:'Middle belt',col:'#7fdc9b',note:'Old S-type family at moderate inclination, next to the 3:1. Proposed source of some large S-type NEAs such as Eros.'},
+ {id:'eun',name:'Eunomia',num:15,a:2.64,e:0.15,s:0.23,sa:.05,se:.012,ss:.008,mem:5700,tax:'S',age:'≈2.5 Gyr',zone:'Middle belt',col:'#ff9f5a',note:'Largest middle-belt family. (15) Eunomia, about 270 km across, is a differentiated-looking S-type.'},
+ {id:'ade',name:'Adeona',num:145,a:2.67,e:0.17,s:0.21,sa:.03,se:.006,ss:.004,mem:2200,tax:'C',age:'≈0.6 Gyr',zone:'Middle belt',col:'#5ad1c8',note:'Dark Ch-type family showing hydrated minerals.'},
+ {id:'jun',name:'Juno',num:3,a:2.67,e:0.233,s:0.23,sa:.02,se:.004,ss:.004,mem:1700,tax:'S',age:'≈0.5 Gyr',zone:'Middle belt',col:'#c4e35a',note:'Cratering family of (3) Juno.'},
+ {id:'gef',name:'Gefion',num:1272,a:2.74,e:0.13,s:0.16,sa:.035,se:.008,ss:.006,mem:2500,tax:'S',age:'≈0.5 Gyr',zone:'Middle belt',col:'#f0a0ff',note:'Once linked to the L-chondrite shower about 466 million years ago in the Ordovician, which left fossil meteorites in Swedish limestone.'},
+ {id:'agn',name:'Agnia',num:847,a:2.78,e:0.07,s:0.06,sa:.02,se:.005,ss:.003,mem:2100,tax:'S',age:'≈0.1 Gyr',zone:'Middle belt',col:'#a0c4ff',note:'Family trapped partly in a weak secular resonance (z1), which shapes its unusual spread.'},
+ {id:'dor',name:'Dora',num:668,a:2.79,e:0.20,s:0.13,sa:.02,se:.005,ss:.004,mem:1250,tax:'C',age:'≈0.5 Gyr',zone:'Middle belt',col:'#8fd3ff',note:'Dark carbonaceous family just inside the 5:2 resonance.'},
+ {id:'pal',name:'Pallas',num:2,a:2.77,e:0.28,s:0.54,sa:.014,se:.006,ss:.008,mem:130,tax:'B',age:'≈1.7 Gyr',zone:'Middle belt (high i)',col:'#b0b8ff',note:'Small cratering family of (2) Pallas at about 33° inclination. Includes Phaethon-like B-types; the Geminid parent Phaethon may be a Pallas fragment.'},
+ {id:'kor',name:'Koronis',num:158,a:2.88,e:0.047,s:0.036,sa:.03,se:.006,ss:.004,mem:6000,tax:'S',age:'≈1.5–2.5 Gyr',zone:'Pristine zone',col:'#ff7a7a',note:'One of Hirayama\'s three original families. Includes (243) Ida and its moon Dactyl, imaged by Galileo. Many members share aligned spins, an effect of YORP.'},
+ {id:'kar',name:'Karin',num:832,a:2.865,e:0.044,s:0.037,sa:.006,se:.002,ss:.001,mem:540,tax:'S',age:'5.75 Myr',zone:'Pristine zone (inside Koronis)',col:'#ffffff',note:'A family born inside Koronis only 5.75 million years ago, dated by backward integration. A source of H-chondrite meteorites and of the dust in one of the zodiacal dust bands.'},
+ {id:'eos',name:'Eos',num:221,a:3.03,e:0.075,s:0.17,sa:.05,se:.01,ss:.008,mem:9800,tax:'K',age:'≈1.3 Gyr',zone:'Outer belt',col:'#b48cff',note:'Hirayama family. Its K-type spectra resemble CO/CV carbonaceous chondrites. Partly cut by the 9:4 and 7:3 resonances.'},
+ {id:'the',name:'Themis',num:24,a:3.14,e:0.155,s:0.02,sa:.05,se:.012,ss:.007,mem:4800,tax:'C',age:'≈2.5 Gyr',zone:'Outer belt',col:'#3fc1ff',note:'Hirayama family. Water ice detected on (24) Themis; members such as 133P/Elst–Pizarro behave like comets.'},
+ {id:'hyg',name:'Hygiea',num:10,a:3.14,e:0.13,s:0.09,sa:.04,se:.01,ss:.006,mem:4900,tax:'C',age:'≈2 Gyr',zone:'Outer belt',col:'#44e0a8',note:'Cratering family of (10) Hygiea, the fourth-largest asteroid, which is nearly round.'},
+ {id:'ver',name:'Veritas',num:490,a:3.17,e:0.062,s:0.157,sa:.008,se:.004,ss:.003,mem:1300,tax:'C',age:'8.3 Myr',zone:'Outer belt',col:'#ffd1a1',note:'Very young family. Its breakup made a zodiacal dust band and a helium-3 spike in late Miocene seafloor sediments.'},
+ {id:'urs',name:'Ursula',num:375,a:3.12,e:0.10,s:0.29,sa:.03,se:.008,ss:.007,mem:1500,tax:'C',age:'≈2 Gyr',zone:'Outer belt',col:'#e6a15c',note:'Old, dispersed family at higher inclination.'},
+ {id:'lix',name:'Lixiaohua',num:3556,a:3.15,e:0.20,s:0.17,sa:.02,se:.005,ss:.004,mem:760,tax:'C',age:'≈0.2 Gyr',zone:'Outer belt',col:'#7ae0e0',note:'Outer-belt family that includes main-belt comet 313P/Gibbs.'},
+ {id:'ala',name:'Alauda',num:702,a:3.19,e:0.02,s:0.36,sa:.03,se:.008,ss:.007,mem:1300,tax:'B',age:'≈1.5 Gyr',zone:'Outer belt (high i)',col:'#6f8bff',note:'High-inclination B-type family around (702) Alauda.'},
+ {id:'eup',name:'Euphrosyne',num:31,a:3.15,e:0.19,s:0.45,sa:.03,se:.01,ss:.01,mem:2000,tax:'C',age:'≈0.3 Gyr',zone:'Outer belt (high i)',col:'#d6ff7a',note:'Dark family at about 26° inclination, sitting across the ν6 resonance; a source of dark, high-inclination NEAs.'}
+];
+const FAMIDX=Object.fromEntries(FAM.map((f,i)=>[f.id,i]));
+
+/* ---------- synthetic main belt ---------- */
+const BELT=(()=>{const r=mulberry32(20261110),g=gaussFn(r);
+  const A=[],E=[],S=[],F=[],T=[];
+  function bgTax(a){const u=r();if(a<2.06)return u<.7?'E':u<.9?'X':'S';if(a<2.5)return u<.6?'S':u<.8?'C':u<.94?'X':'V';if(a<2.82)return u<.45?'S':u<.8?'C':'X';if(a<3.3)return u<.2?'S':u<.65?'C':u<.82?'X':u<.92?'B':'K';return u<.6?'C':'X';}
+  let tries=0;
+  while(A.length<7200&&tries<200000){tries++;const u=r();let a,e,s;
+    if(u<.035){a=1.80+r()*.22;e=Math.abs(.07+.04*g());s=.36+.05*g();}
+    else if(u<.43){a=2.1+r()*.4;e=Math.abs(.13+.06*g());s=Math.abs(.07+.065*g());}
+    else if(u<.70){a=2.5+r()*.32;e=Math.abs(.13+.07*g());s=Math.abs(.1+.08*g());}
+    else if(u<.75){a=2.82+r()*.14;e=Math.abs(.1+.06*g());s=Math.abs(.08+.07*g());}
+    else if(u<.965){a=2.96+r()*.32;e=Math.abs(.12+.065*g());s=Math.abs(.1+.08*g());}
+    else{a=3.3+r()*.4;e=Math.abs(.08+.05*g());s=Math.abs(.1+.07*g());}
+    if(e>.33||s>.6)continue;
+    if(a*(1-e)<1.666&&a>2.06)continue;
+    if(inGap(a,e))continue;
+    if(a>2.06&&a<2.5&&s>nu6S(a)){const pho=(a>2.22&&s>.3&&s<.46&&e<.3);if(!pho||r()<.6)continue;}
+    if(a>=2.06&&a<2.1)continue;
+    A.push(a);E.push(e);S.push(s);F.push(-1);T.push(bgTax(a));}
+  FAM.forEach((f,fi)=>{const n=Math.round(Math.sqrt(f.mem)*10);let k=0,t=0;
+    while(k<n&&t<n*6){t++;const a=f.a+f.sa*g(),e=Math.abs(f.e+f.se*g()),s=Math.abs(f.s+f.ss*g());
+      if(inGap(a,e))continue;
+      if(!['hun','pho','pal','eup','mar','eun','jun','ade'].includes(f.id)&&a<2.5&&s>nu6S(a)+.03)continue;
+      let tx=f.tax; if(r()<.07)tx=bgTax(a);
+      A.push(a);E.push(e);S.push(s);F.push(fi);T.push(tx);k++;}});
+  const N=A.length;
+  // osculating offsets
+  const OA=new Float32Array(N),OE=new Float32Array(N),OS=new Float32Array(N);
+  for(let i=0;i<N;i++){const ef=.03+.025*(A[i]-2)/1.3,ph=r()*TAU;OE[i]=Math.sqrt(E[i]*E[i]+ef*ef+2*E[i]*ef*Math.cos(ph))+.008*g();
+    const sf=.022,p2=r()*TAU;OS[i]=Math.abs(Math.sqrt(S[i]*S[i]+sf*sf+2*S[i]*sf*Math.cos(p2))+.004*g());OA[i]=A[i]+.007*g();}
+  return {A,E,S,F,T,N,OA,OE,OS};
+})();
+
+/* ---------- 01 MAP ---------- */
+const MAP=(()=>{
+  const cv=$('#map-canvas');let ctx,W,H,dpr;
+  let view='inner',rot=false,playing=!reduceMotion,t=0,last=0,speed=1;
+  const r=mulberry32(99),g=gaussFn(r);
+  const PL={Me:{a:.387,e:.206,w:77*DEG,L:252*DEG,col:'#b7b2a8',name:'Mercury'},Ve:{a:.723,e:.007,w:131*DEG,L:182*DEG,col:'#f0d9a6',name:'Venus'},Ea:{a:1,e:.017,w:103*DEG,L:100*DEG,col:'#6fb6ff',name:'Earth'},Ma:{a:1.524,e:.093,w:336*DEG,L:355*DEG,col:'#ff7a52',name:'Mars'},Ju:{a:5.203,e:.048,w:14*DEG,L:34*DEG,col:'#f2c27a',name:'Jupiter'},Sa:{a:9.54,e:.054,w:93*DEG,L:50*DEG,col:'#e9d59a',name:'Saturn'},Ur:{a:19.19,e:.047,w:173*DEG,L:314*DEG,col:'#9de3e6',name:'Uranus'},Ne:{a:30.07,e:.009,w:48*DEG,L:304*DEG,col:'#6f8dff',name:'Neptune'}};
+  for(const k in PL){PL[k].n=TAU/Math.pow(PL[k].a,1.5);}
+  function kep(a,e,w,L){let M=(L-w)%TAU;let E=e<.8?M:Math.PI;for(let k=0;k<6;k++)E=E-(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));const x=a*(Math.cos(E)-e),y=a*Math.sqrt(1-e*e)*Math.sin(E);const c=Math.cos(w),s=Math.sin(w);return [x*c-y*s,x*s+y*c];}
+  function mkPop(key,label,col,size,count,gen,viewName,kind='kep'){const p={key,label,col,size,vis:true,view:viewName,kind,a:new Float32Array(count),e:new Float32Array(count),w:new Float32Array(count),L:new Float32Array(count),n:new Float32Array(count),x:new Float32Array(count),y:new Float32Array(count),A:new Float32Array(count),nu:new Float32Array(count),ph:new Float32Array(count),side:new Int8Array(count),N:count};for(let i=0;i<count;i++)gen(p,i);return p;}
+  const LJ0=PL.Ju.L, LN0=PL.Ne.L;
+  function std(p,i,a,e){p.a[i]=a;p.e[i]=e;p.w[i]=r()*TAU;p.L[i]=r()*TAU;p.n[i]=TAU/Math.pow(a,1.5);}
+  // inner
+  const beltIdx=[];for(let i=0;i<BELT.N;i++)if(BELT.A[i]>2.06&&BELT.A[i]<3.3)beltIdx.push(i);
+  const hunIdx=[];for(let i=0;i<BELT.N;i++)if(BELT.A[i]<2.06)hunIdx.push(i);
+  const cybIdx=[];for(let i=0;i<BELT.N;i++)if(BELT.A[i]>3.3)cybIdx.push(i);
+  const pick=(arr)=>arr[Math.floor(r()*arr.length)];
+  const NEAgen=genNEA(260,5);
+  const pops={
+    nea:mkPop('nea','Near-Earth asteroids','#7bd88f',1.8,260,(p,i)=>std(p,i,NEAgen.a[i],NEAgen.e[i]),'inner'),
+    hun:mkPop('hun','Hungarias','#d7dcea',1.4,220,(p,i)=>{const j=pick(hunIdx);std(p,i,BELT.A[j],BELT.E[j]);},'inner'),
+    mb:mkPop('mb','Main belt','#c9cfdf',1.1,4200,(p,i)=>{const j=pick(beltIdx);std(p,i,BELT.A[j],BELT.E[j]);},'inner'),
+    cyb:mkPop('cyb','Cybeles','#45c7f0',1.4,170,(p,i)=>{const j=pick(cybIdx);std(p,i,BELT.A[j],BELT.E[j]);},'inner'),
+    hil:mkPop('hil','Hildas','#ff9d4d',1.5,520,(p,i)=>{const a=3.97*(1+.004*g()),e=clamp(.18+.06*g(),.05,.32);p.a[i]=a;p.e[i]=e;p.n[i]=PL.Ju.n*1.5;p.L[i]=r()*TAU;p.w[i]=3*LJ0-2*p.L[i]+ 35*DEG*g()*.6;},'inner'),
+    tro:mkPop('tro','Jupiter Trojans','#ff5c8a',1.4,1000,(p,i)=>{p.side[i]=r()<.6?1:-1;p.a[i]=PL.Ju.a;p.e[i]=Math.abs(.07*g());p.w[i]=r()*TAU;p.A[i]=(8+22*r())*DEG;p.nu[i]=TAU/150*(0.9+.2*r());p.ph[i]=r()*TAU;},'inner','tro'),
+    // outer
+    cen:mkPop('cen','Centaurs','#ffd166',1.6,170,(p,i)=>{let a,e;do{a=6+r()*24;e=r()*.5;}while(a*(1-e)<5.5);std(p,i,a,e);},'outer'),
+    ntr:mkPop('ntr','Neptune Trojans','#ff5c8a',1.8,70,(p,i)=>{p.side[i]=r()<.5?1:-1;p.a[i]=PL.Ne.a;p.e[i]=Math.abs(.05*g());p.w[i]=r()*TAU;p.A[i]=(5+20*r())*DEG;p.nu[i]=TAU/9000*(0.9+.2*r());p.ph[i]=r()*TAU;},'outer','ntr'),
+    plu:mkPop('plu','Plutinos (3:2)','#ff9d4d',1.6,480,(p,i)=>{p.a[i]=39.4*(1+.003*g());p.e[i]=clamp(.17+.07*g(),.03,.33);p.n[i]=PL.Ne.n*2/3;p.L[i]=r()*TAU;p.w[i]=3*p.L[i]-2*LN0-Math.PI-60*DEG*g()*.5;},'outer'),
+    two:mkPop('two','Twotinos (2:1)','#c792ea',1.6,140,(p,i)=>{p.a[i]=47.8*(1+.003*g());p.e[i]=clamp(.2+.06*g(),.05,.35);p.n[i]=PL.Ne.n/2;p.L[i]=r()*TAU;const c=r()<.25?Math.PI:(r()<.5?75*DEG:285*DEG);p.w[i]=2*p.L[i]-LN0-c-15*DEG*g();},'outer'),
+    clc:mkPop('clc','Classical belt','#c9cfdf',1.2,1100,(p,i)=>{const cold=r()<.6;let a=cold?42.5+r()*4.8:40.5+r()*7.5;if(Math.abs(a-43.7)<.25&&r()<.5)a+=.5;std(p,i,a,cold?Math.abs(.04*g()):clamp(Math.abs(.1*g()),0,.2));},'outer'),
+    sd:mkPop('sd','Scattered disk','#7fb6ff',1.4,320,(p,i)=>{const a=50*Math.pow(10,r()*1.2),q=30+r()*8;std(p,i,a,1-q/a);},'outer'),
+  };
+  const named={outer:[{n:'Pluto',a:39.48,e:.249,w:224*DEG,L:238*DEG,c:'#ffb38a',res:[3,2]},{n:'Haumea',a:43.1,e:.195,w:240*DEG,L:220*DEG,c:'#ffffff',key:'hau'},{n:'Makemake',a:45.4,e:.16,w:297*DEG,L:180*DEG,c:'#ffd9b8'},{n:'Eris',a:67.9,e:.44,w:186*DEG,L:206*DEG,c:'#e8e8ff'},{n:'Arrokoth',a:44.6,e:.04,w:170*DEG,L:300*DEG,c:'#ff8f6b'}]};
+  // Haumea family members
+  pops.hau=mkPop('hau','Haumea family','#ffffff',2.2,11,(p,i)=>std(p,i,43.1+.4*g(),clamp(.13+.03*g(),.05,.2)),'outer');
+  named.outer.forEach(o=>{o.n0=TAU/Math.pow(o.a,1.5);if(o.res)o.n0=PL.Ne.n*o.res[1]/o.res[0];});
+  const VIEW={inner:{R:5.9,yps:1.6,pl:['Me','Ve','Ea','Ma','Ju'],ref:'Ju',pops:['nea','hun','mb','cyb','hil','tro']},outer:{R:72,yps:30,pl:['Ju','Sa','Ur','Ne'],ref:'Ne',pops:['cen','ntr','plu','two','clc','sd','hau']},oort:{}};
+  // oort particles
+  const OO=(()=>{const n=3400,R=new Float32Array(n),T=new Float32Array(n),K=new Int8Array(n);for(let i=0;i<n;i++){const u=r();let rr,k;if(u<.08){rr=30+r()*20;k=0;}else if(u<.16){rr=30*Math.pow(10,r()*1.6);k=1;}else if(u<.5){rr=2000*Math.pow(10,r());k=2;}else{rr=20000*Math.pow(10,r()*.75);k=3;}R[i]=rr;T[i]=r()*TAU;K[i]=k;}return{n,R,T,K};})();
+  const OOK=[{key:'kb',label:'Kuiper belt',col:'#c9cfdf',vis:true},{key:'sd',label:'Scattered disk',col:'#7fb6ff',vis:true},{key:'in',label:'Inner Oort (Hills) cloud',col:'#9ad7ff',vis:true},{key:'out',label:'Outer Oort cloud',col:'#6f86c9',vis:true}];
+  let highlight=null;
+  function fit(){dpr=window.devicePixelRatio||1;W=cv.clientWidth||600;H=Math.round(clamp(W*.9,340,660));cv.style.height=H+'px';cv.width=W*dpr;cv.height=H*dpr;ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+  function legend(){const el=$('#map-legend');el.innerHTML='';
+    if(view==='oort'){OOK.forEach(o=>{const b=document.createElement('button');b.className='chip';b.setAttribute('aria-pressed',o.vis);b.innerHTML=`<i style="background:${o.col}"></i>${o.label}`;b.onclick=()=>{o.vis=!o.vis;b.setAttribute('aria-pressed',o.vis);draw();};el.appendChild(b);});return;}
+    VIEW[view].pops.forEach(k=>{const p=pops[k];const b=document.createElement('button');b.className='chip'+(highlight===k?' sel':'');b.setAttribute('aria-pressed',p.vis);b.innerHTML=`<i style="background:${p.col}"></i>${p.label}`;b.onclick=()=>{p.vis=!p.vis;b.setAttribute('aria-pressed',p.vis);draw();};el.appendChild(b);});}
+  function setView(v,hl){view=v;highlight=hl||null;['inner','outer','oort'].forEach(k=>{$('#mv-'+k).setAttribute('aria-pressed',k===v);$('#mapnote-'+k).hidden=k!==v;});
+    $('#frame-seg').style.visibility=v==='oort'?'hidden':'visible';$('#fr-planet').textContent=v==='outer'?'Neptune':'Jupiter';
+    if(hl&&pops[hl]){VIEW[v].pops.forEach(k=>pops[k].vis=true);} legend();draw();}
+  function draw(){if(!ctx)return;ctx.fillStyle='#070a14';ctx.fillRect(0,0,W,H);
+    if(view==='oort'){drawOort();return;}
+    const V=VIEW[view],cx=W/2,cy=H/2,sc=(Math.min(W,H)/2-12)/V.R;
+    const ref=PL[V.ref];const lref=ref.L+ref.n*t;const rotA=rot?(Math.PI/2-lref):0;const cr=Math.cos(rotA),sr=Math.sin(rotA);
+    const P=(x,y)=>[cx+(x*cr-y*sr)*sc,cy-(x*sr+y*cr)*sc];
+    // planet orbits
+    ctx.lineWidth=1;V.pl.forEach(k=>{const p=PL[k];ctx.strokeStyle='rgba(150,165,205,.22)';ctx.beginPath();for(let j=0;j<=120;j++){const[x,y]=kep(p.a,p.e,p.w,p.w+j/120*TAU);const[X,Y]=P(x,y);j?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}ctx.stroke();});
+    // sun
+    const gr=ctx.createRadialGradient(cx,cy,0,cx,cy,14);gr.addColorStop(0,'#fff6d6');gr.addColorStop(.4,'#ffd166');gr.addColorStop(1,'rgba(255,209,102,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(cx,cy,14,0,TAU);ctx.fill();
+    // populations
+    V.pops.forEach(k=>{const p=pops[k];if(!p.vis)return;const dim=highlight&&highlight!==k;ctx.fillStyle=p.col;ctx.globalAlpha=dim?.18:(k==='mb'||k==='clc'?.55:.85);const s=p.size*(highlight===k?1.5:1);
+      for(let i=0;i<p.N;i++){let L,a=p.a[i];
+        if(p.kind==='tro'||p.kind==='ntr'){const pl=p.kind==='tro'?PL.Ju:PL.Ne;L=pl.L+pl.n*t+p.side[i]*60*DEG+p.A[i]*Math.sin(p.nu[i]*t+p.ph[i]);a=pl.a*(1+.004*Math.sin(p.nu[i]*t+p.ph[i]+1.3));}
+        else L=p.L[i]+p.n[i]*t;
+        const[x,y]=kep(a,p.e[i],p.w[i],L);const[X,Y]=P(x,y);ctx.fillRect(X-s/2,Y-s/2,s,s);}
+    });ctx.globalAlpha=1;
+    // named objects
+    if(view==='outer'){named.outer.forEach(o=>{const[x,y]=kep(o.a,o.e,o.w,o.L+o.n0*t);const[X,Y]=P(x,y);ctx.strokeStyle=o.c;ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(X,Y,4.5,0,TAU);ctx.stroke();ctx.fillStyle=o.c;ctx.font='11px "IBM Plex Sans",sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(o.n,X+7,Y);});}
+    // planets
+    V.pl.forEach(k=>{const p=PL[k];const[x,y]=kep(p.a,p.e,p.w,p.L+p.n*t);const[X,Y]=P(x,y);ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(X,Y,k==='Ju'||k==='Sa'?5:3.5,0,TAU);ctx.fill();ctx.font='11px "IBM Plex Sans",sans-serif';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(p.name,X+6,Y-3);});
+    // L points in rotating frame
+    if(rot){const pl=PL[V.ref];[[60,'L4'],[-60,'L5'],[180,'L3']].forEach(([d,l])=>{const ang=Math.PI/2+d*DEG;const X=cx+Math.cos(ang)*pl.a*sc,Y=cy-Math.sin(ang)*pl.a*sc;ctx.strokeStyle='rgba(242,176,74,.8)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X-5,Y);ctx.lineTo(X+5,Y);ctx.moveTo(X,Y-5);ctx.lineTo(X,Y+5);ctx.stroke();ctx.fillStyle=COL.accent;ctx.font='11px "IBM Plex Mono",monospace';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(l,X,Y+7);});}
+    // scale bar
+    const au=view==='inner'?1:10;ctx.strokeStyle=COL.muted;ctx.fillStyle=COL.muted;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(14,H-16);ctx.lineTo(14+au*sc,H-16);ctx.stroke();ctx.font='11px "IBM Plex Mono",monospace';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(au+' AU',14,H-20);
+    $('#map-time').textContent=`Simulated time: ${t.toFixed(0)} years · ${rot?'frame turns with '+PL[V.ref].name+' (fixed at top)':'inertial frame'}${view==='outer'?' · Pluto, Haumea, Makemake, Eris and Arrokoth labelled':''}`;
+  }
+  const OR={r0:.3,r1:3e5};
+  function lr(rr,Rm){return Rm*(Math.log10(rr)-Math.log10(OR.r0))/(Math.log10(OR.r1)-Math.log10(OR.r0));}
+  function drawOort(){const cx=W/2,cy=H/2,Rm=Math.min(W,H)/2-10;
+    // rings
+    ctx.font='10.5px "IBM Plex Mono",monospace';ctx.textAlign='left';ctx.textBaseline='bottom';
+    [1,10,100,1000,1e4,1e5].forEach(v=>{const R=lr(v,Rm);ctx.strokeStyle='rgba(150,165,205,.22)';ctx.setLineDash([2,4]);ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=COL.muted;ctx.fillText(v>=1000?(v/1000)+'k AU':v+' AU',cx+R*Math.cos(-0.6)+3,cy+R*Math.sin(-0.6));});
+    // particles
+    const cols=['#c9cfdf','#7fb6ff','#9ad7ff','#6f86c9'];
+    for(let i=0;i<OO.n;i++){const k=OO.K[i];if(!OOK[k].vis)continue;const rr=OO.R[i];const th=OO.T[i]+t*0.02/Math.pow(rr/30,0.75);const R=lr(rr,Rm);ctx.fillStyle=cols[k];ctx.globalAlpha=k===3?.38:k===2?.5:.7;ctx.fillRect(cx+R*Math.cos(th)-.7,cy-R*Math.sin(th)-.7,1.4,1.4);}ctx.globalAlpha=1;
+    // planets
+    [['Earth',1,'#6fb6ff'],['Jupiter',5.2,'#f2c27a'],['Neptune',30.07,'#6f8dff']].forEach(([n,a,c],j)=>{const R=lr(a,Rm);ctx.strokeStyle=c;ctx.globalAlpha=.6;ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=c;ctx.textAlign='right';ctx.fillText(n,cx-R*.71-2,cy-R*.71);});
+    // sedna orbit
+    ctx.strokeStyle='#ff8f6b';ctx.lineWidth=1.3;ctx.beginPath();const sa=506,se=.85,sw=311*DEG;for(let j=0;j<=200;j++){const f=j/200*TAU;const rr=sa*(1-se*se)/(1+se*Math.cos(f));const R=lr(rr,Rm);const X=cx+R*Math.cos(f+sw),Y=cy-R*Math.sin(f+sw);j?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}ctx.stroke();
+    {const R=lr(76,Rm);ctx.fillStyle='#ff8f6b';ctx.textAlign='left';ctx.fillText('Sedna (orbit, q≈76 AU)',cx+R*Math.cos(sw)+6,cy-R*Math.sin(sw));}
+    // voyager
+    {const R=lr(170,Rm),ang=35*DEG;ctx.strokeStyle='#7bd88f';ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+R*Math.cos(ang),cy-R*Math.sin(ang));ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#7bd88f';ctx.beginPath();ctx.arc(cx+R*Math.cos(ang),cy-R*Math.sin(ang),3,0,TAU);ctx.fill();ctx.textAlign='left';ctx.fillText('Voyager 1 (≈170 AU)',cx+R*Math.cos(ang)+6,cy-R*Math.sin(ang)-2);}
+    // light year & proxima
+    {const R=lr(63241,Rm);ctx.strokeStyle='rgba(242,176,74,.7)';ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.stroke();ctx.fillStyle=COL.accent;ctx.textAlign='center';ctx.fillText('1 light-year',cx,cy-R-3);}
+    {const R=lr(268000,Rm),ang=-120*DEG;const X=cx+R*Math.cos(ang),Y=cy-R*Math.sin(ang);ctx.fillStyle='#ff6b6b';ctx.beginPath();ctx.arc(X,Y,3.5,0,TAU);ctx.fill();ctx.textAlign=X<cx?'left':'right';ctx.fillText('Proxima Centauri distance (268,000 AU)',X+(X<cx?7:-7),Y+12);}
+    ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(cx,cy,3,0,TAU);ctx.fill();
+    $('#map-time').textContent='Logarithmic radius: each dashed ring is 10× the previous. Particle motion is decorative and not to time scale.';
+  }
+  cv.addEventListener('mousemove',ev=>{if(view!=='oort'){hideTip();return;}const b=cv.getBoundingClientRect();const x=ev.clientX-b.left-W/2,y=ev.clientY-b.top-H/2;const Rm=Math.min(W,H)/2-10;const R=Math.hypot(x,y);const lg=Math.log10(OR.r0)+R/Rm*(Math.log10(OR.r1)-Math.log10(OR.r0));const au=Math.pow(10,lg);
+    const lh=au*499/3600;let lt=lh<1?(lh*60).toFixed(1)+' light-minutes':lh<48?lh.toFixed(1)+' light-hours':lh/24<365?(lh/24).toFixed(1)+' light-days':(au/63241).toFixed(2)+' light-years';
+    let zone=au<1.3?'Inner planets':au<5.5?'Asteroid belts':au<30?'Giant planets / Centaurs':au<50?'Kuiper belt':au<2000?'Scattered disk / detached objects':au<20000?'Inner (Hills) Oort cloud':au<150000?'Outer Oort cloud':'Interstellar space';
+    showTip(`<b class="num">${au<10?au.toFixed(2):Math.round(au).toLocaleString()} AU</b><br>${lt}<br><span style="color:${COL.muted}">${zone}</span>`,ev.clientX,ev.clientY);});
+  cv.addEventListener('mouseleave',hideTip);
+  function loop(ts){if(!last)last=ts;const dt=Math.min(.05,(ts-last)/1000);last=ts;if(playing){t+=dt*(view==='oort'?30:VIEW[view].yps)*speed;draw();}requestAnimationFrame(loop);}
+  ['inner','outer','oort'].forEach(k=>$('#mv-'+k).addEventListener('click',()=>setView(k)));
+  segBind([$('#fr-in'),$('#fr-rot')],b=>{rot=b.id==='fr-rot';draw();});
+  $('#map-play').textContent=playing?'Pause':'Play';
+  $('#map-play').onclick=()=>{playing=!playing;$('#map-play').textContent=playing?'Pause':'Play';};
+  $('#map-speed').oninput=e=>speed=+e.target.value;
+  onResize(cv,fit);fit();legend();requestAnimationFrame(loop);
+  return {setView,setRot:(v)=>{rot=v;$('#fr-in').setAttribute('aria-pressed',!v);$('#fr-rot').setAttribute('aria-pressed',v);}};
+})();
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>{const[v,k]=b.dataset.goto.split(':');MAP.setView(v,k||null);if(k==='hil'||k==='tro'||k==='ntr'||k==='plu')MAP.setRot(true);document.getElementById('map').scrollIntoView({behavior:reduceMotion?'auto':'smooth'});}));
+
+/* ---------- NEA synthetic generator (used in map & NEA plot) ---------- */
+function genNEA(N,seed){const r=mulberry32(seed),g=gaussFn(r);const SRCW=[['nu6',39],['r31',19],['r52',17],['hun',11],['pho',7],['r21',5],['jfc',2]];const tot=100;
+  const a=new Float32Array(N),e=new Float32Array(N),src=[];
+  for(let i=0;i<N;i++){let u=r()*tot,k='nu6';for(const[s,w]of SRCW){if(u<w){k=s;break;}u-=w;}
+    let A=1.5,Ee=.3;for(let tr=0;tr<60;tr++){let q;switch(k){
+      case 'nu6':A=.75+1.7*Math.pow(r(),.9);q=.3+1.0*Math.pow(r(),.6);break;
+      case 'r31':A=r()<.55?2.5+.05*g():1.2+r()*1.3;q=.1+1.2*r();break;
+      case 'r52':A=r()<.65?2.82+.03*g():1.5+r()*1.3;q=.15+1.15*r();break;
+      case 'hun':A=1.7+r()*.35;q=r()<.7?1.0+.3*Math.sqrt(r()):.6+.7*r();break;
+      case 'pho':A=2.1+r()*.35;q=.7+.6*Math.pow(r(),.6);break;
+      case 'r21':A=3.27+.05*g();q=.15+1.15*r();break;
+      default:A=2.6+r()*.95;q=.2+1.1*r();}
+      Ee=1-q/A;if(Ee>=0&&Ee<.96&&A>.5&&A<3.6)break;}
+    a[i]=A;e[i]=Math.max(0,Ee);src.push(k);}
+  return {a,e,src,N};}
+
+/* ---------- 02 HISTOGRAM ---------- */
+(()=>{const cv=$('#hist-canvas');const F=new Frame(cv,{aspect:.42,minH:240,maxH:420});const x0=1.8,x1=3.7,bw=.0075,nb=Math.ceil((x1-x0)/bw);
+  const cnt=new Array(nb).fill(0);for(let i=0;i<BELT.N;i++){const b=Math.floor((BELT.A[i]-x0)/bw);if(b>=0&&b<nb)cnt[b]++;}
+  const ymax=Math.max(...cnt)*1.18;let hov=-1;
+  function draw(){F.dom([x0,x1],[0,ymax]);F.axes('Proper semimajor axis a (AU)','Asteroids per bin',9,4);const c=F.ctx;F.clip();
+    for(let b=0;b<nb;b++){const X0=F.X(x0+b*bw),X1=F.X(x0+(b+1)*bw);c.fillStyle=b===hov?'#ffd58a':COL.accent;c.globalAlpha=b===hov?1:.85;c.fillRect(X0,F.Y(cnt[b]),Math.max(1,X1-X0-.3),F.Y(0)-F.Y(cnt[b]));}
+    c.globalAlpha=1;c.setLineDash([4,4]);c.lineWidth=1;c.font='11px "IBM Plex Mono",monospace';c.textAlign='center';
+    RES.filter(r=>r.a<x1).forEach((r,j)=>{const X=F.X(r.a);c.strokeStyle='rgba(232,235,244,.55)';c.beginPath();c.moveTo(X,F.t+16+(j%2)*13);c.lineTo(X,F.t+F.ph);c.stroke();c.fillStyle=COL.text;c.textBaseline='top';c.fillText(r.label,X,F.t+3+(j%2)*13);});
+    c.setLineDash([]);F.unclip();}
+  cv.addEventListener('mousemove',ev=>{const b=cv.getBoundingClientRect();const px=ev.clientX-b.left,py=ev.clientY-b.top;if(!F.inside(px,py)){hov=-1;hideTip();draw();return;}const a=F.iX(px);hov=Math.floor((a-x0)/bw);const near=RES.reduce((m,r)=>Math.abs(r.a-a)<Math.abs(m.a-a)?r:m);
+    showTip(`<b class="num">${(x0+hov*bw).toFixed(3)}–${(x0+(hov+1)*bw).toFixed(3)} AU</b><br>${cnt[hov]||0} asteroids<br><span style="color:${COL.muted}">nearest resonance ${near.label} at ${near.a.toFixed(3)} AU</span>`,ev.clientX,ev.clientY);draw();});
+  cv.addEventListener('mouseleave',()=>{hov=-1;hideTip();draw();});
+  onResize(cv,()=>{F.fit();draw();});draw();})();
+
+/* ---------- 02 ROSETTE ---------- */
+(()=>{const cv=$('#rose-canvas');let ctx,W,H;const sa=$('#rose-a'),se=$('#rose-e');
+  function fit(){const dpr=window.devicePixelRatio||1;W=cv.clientWidth||500;H=Math.round(clamp(W*.9,300,560));cv.style.height=H+'px';cv.width=W*dpr;cv.height=H*dpr;ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+  function draw(){const a=+sa.value,e=+se.value;ctx.fillStyle='#070a14';ctx.fillRect(0,0,W,H);const cx=W/2,cy=H/2;const R=Math.max(a*(1+e),AJ)*1.08;const sc=(Math.min(W,H)/2-10)/R;
+    const nJ=TAU/Math.pow(AJ,1.5),n=TAU/Math.pow(a,1.5),P=TAU/n,Norb=40,steps=Norb*160;
+    ctx.strokeStyle='rgba(150,165,205,.3)';ctx.setLineDash([3,4]);ctx.beginPath();ctx.arc(cx,cy,AJ*sc,0,TAU);ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='rgba(127,182,255,.55)';ctx.lineWidth=.9;ctx.beginPath();
+    function pos(tt){const M=n*tt;let E=M;for(let k=0;k<6;k++)E=E-(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));const x=a*(Math.cos(E)-e),y=a*Math.sqrt(1-e*e)*Math.sin(E);const ang=-nJ*tt+Math.PI/2;const c=Math.cos(ang),s=Math.sin(ang);return [cx+(x*c-y*s)*sc,cy-(x*s+y*c)*sc];}
+    for(let k=0;k<=steps;k++){const[X,Y]=pos(k/160*P);k?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}ctx.stroke();
+    const syn=TAU/(n-nJ),Tend=Norb*P;ctx.fillStyle=COL.accent;for(let k=0;k*syn<=Tend;k++){const[X,Y]=pos(k*syn);ctx.beginPath();ctx.arc(X,Y,3,0,TAU);ctx.fill();}
+    ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(cx,cy,5,0,TAU);ctx.fill();ctx.fillStyle='#f2c27a';ctx.beginPath();ctx.arc(cx,cy-AJ*sc,6,0,TAU);ctx.fill();ctx.font='11px "IBM Plex Sans",sans-serif';ctx.textAlign='left';ctx.fillText('Jupiter',cx+9,cy-AJ*sc+4);
+    const ratio=Math.pow(AJ/a,1.5);$('#rose-ra').textContent=a.toFixed(3)+' AU';$('#rose-rp').textContent=ratio.toFixed(4);
+    let best=null;for(const r of RES){const d=Math.abs(ratio-r.p/r.q)/(r.p/r.q);if(d<.004&&(!best||d<best.d))best={r,d};}
+    $('#rose-rs').textContent=best?'In '+best.r.label+' resonance':'Not resonant';$('#rose-rs').style.color=best?COL.accent:COL.text;}
+  sa.oninput=se.oninput=draw;$$('[data-snap]').forEach(b=>b.onclick=()=>{sa.value=RESMAP[b.dataset.snap].a.toFixed(3);draw();});
+  onResize(cv,fit);fit();})();
+
+/* ---------- 03 OSC vs PROPER ---------- */
+(()=>{const cv=$('#op-canvas');const F=new Frame(cv,{aspect:.5,maxH:460});let mode=0,target=0,proj='ae',anim=null;
+  const idx=[];for(let i=0;i<BELT.N;i++)if(BELT.A[i]>2.82&&BELT.A[i]<3.3)idx.push(i);
+  const hl=new Set(['kor','eos','the','hyg','ver','kar'].map(k=>FAMIDX[k]));
+  function draw(){const yr=proj==='ae'?[0,.3]:[0,.32];F.dom([2.82,3.3],yr);F.axes(mode>.5?'Proper a (AU)':'Osculating a (AU)',(mode>.5?'Proper ':'Osculating ')+(proj==='ae'?'e':'sin i'));const c=F.ctx;F.clip();
+    for(const i of idx){const f=BELT.F[i];const a=BELT.OA[i]+(BELT.A[i]-BELT.OA[i])*mode;const y=proj==='ae'?BELT.OE[i]+(BELT.E[i]-BELT.OE[i])*mode:BELT.OS[i]+(BELT.S[i]-BELT.OS[i])*mode;
+      const isF=hl.has(f);c.fillStyle=isF&&mode>.02?FAM[f].col:'#aeb6cc';c.globalAlpha=isF?(.35+.55*mode):.4;c.fillRect(F.X(a)-.9,F.Y(y)-.9,1.8,1.8);}
+    c.globalAlpha=1;if(mode>.6){c.font='12px "IBM Plex Sans",sans-serif';c.textAlign='center';c.globalAlpha=(mode-.6)/.4;['kor','eos','the','hyg','ver'].forEach(k=>{const f=FAM[FAMIDX[k]];const y=proj==='ae'?f.e:f.s;c.fillStyle=f.col;c.fillText(f.name,F.X(f.a),F.Y(y)-(proj==='ae'?26:18));});c.globalAlpha=1;}
+    F.unclip();}
+  function go(to){target=to;if(reduceMotion){mode=to;draw();return;}cancelAnimationFrame(anim);const st=performance.now(),m0=mode;(function step(ts){const k=clamp((ts-st)/900,0,1);const ease=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;mode=m0+(to-m0)*ease;draw();if(k<1)anim=requestAnimationFrame(step);})(st);}
+  segBind([$('#op-osc'),$('#op-pro')],b=>go(b.id==='op-pro'?1:0));
+  segBind([$('#op-ae'),$('#op-ai')],b=>{proj=b.id==='op-ae'?'ae':'as';draw();});
+  onResize(cv,()=>{F.fit();draw();});draw();})();
+
+/* ---------- 04 EXPLORER ---------- */
+const EXP=(()=>{const cv=$('#ex-canvas');const F=new Frame(cv,{aspect:.72,maxH:620});let ax='ae',col='fam',sel=-1;
+  const byF=FAM.map(()=>[]),bg=[];for(let i=0;i<BELT.N;i++){BELT.F[i]>=0?byF[BELT.F[i]].push(i):bg.push(i);}
+  const byT={};for(let i=0;i<BELT.N;i++){(byT[BELT.T[i]]=byT[BELT.T[i]]||[]).push(i);}
+  function xy(i){return ax==='ae'?[BELT.A[i],BELT.E[i]]:ax==='as'?[BELT.A[i],BELT.S[i]]:[BELT.E[i],BELT.S[i]];}
+  function dom(){if(ax==='ae')F.dom([1.75,3.72],[0,.34]);else if(ax==='as')F.dom([1.75,3.72],[0,.6]);else F.dom([0,.34],[0,.6]);}
+  function draw(){dom();const lab={ae:['Proper semimajor axis a (AU)','Proper eccentricity e'],as:['Proper semimajor axis a (AU)','Proper sin i'],es:['Proper eccentricity e','Proper sin i']}[ax];F.axes(lab[0],lab[1]);const c=F.ctx;F.clip();
+    // guides
+    if(ax!=='es'){c.setLineDash([3,4]);c.lineWidth=1;c.font='10.5px "IBM Plex Mono",monospace';c.textAlign='center';c.textBaseline='top';RES.filter(r=>r.a<3.72&&r.a>1.75).forEach((r,j)=>{const X=F.X(r.a);c.strokeStyle='rgba(232,235,244,.32)';c.beginPath();c.moveTo(X,F.t+14);c.lineTo(X,F.t+F.ph);c.stroke();c.fillStyle=COL.muted;c.fillText(r.label,X,F.t+2);});c.setLineDash([]);
+      c.strokeStyle='rgba(255,107,107,.7)';c.lineWidth=1.3;c.beginPath();if(ax==='as'){for(let a=2.05;a<=2.62;a+=.005){const X=F.X(a),Y=F.Y(nu6S(a));a===2.05?c.moveTo(X,Y):c.lineTo(X,Y);}c.stroke();c.fillStyle='#ff8a8a';c.textAlign='left';c.fillText('ν6',F.X(2.3)-18,F.Y(nu6S(2.3))-6);}else{for(let a=1.75;a<=3.72;a+=.01){const e=1-1.666/a;const X=F.X(a),Y=F.Y(e);a===1.75?c.moveTo(X,Y):c.lineTo(X,Y);}c.stroke();c.fillStyle='#ff8a8a';c.textAlign='left';c.fillText('Mars-crossing (q = 1.666 AU)',F.X(2.02),F.Y(1-1.666/2.02)+4);}}
+    const dot=(i,s)=>{const[x,y]=xy(i);c.fillRect(F.X(x)-s/2,F.Y(y)-s/2,s,s);};
+    if(col==='tax'){for(const t in byT){c.fillStyle=TAX[t].c;c.globalAlpha=.6;byT[t].forEach(i=>dot(i,1.7));}}
+    else{c.fillStyle='#9aa3bb';c.globalAlpha=col==='none'?.5:.28;bg.forEach(i=>dot(i,1.5));
+      FAM.forEach((f,fi)=>{c.fillStyle=col==='none'?'#9aa3bb':f.col;c.globalAlpha=col==='none'?.5:(sel>=0&&sel!==fi?.15:.75);byF[fi].forEach(i=>dot(i,col==='none'?1.5:(sel===fi?2.4:1.8)));});}
+    c.globalAlpha=1;
+    if(sel>=0){const f=FAM[sel];const[x,y]=ax==='ae'?[f.a,f.e]:ax==='as'?[f.a,f.s]:[f.e,f.s];c.strokeStyle=COL.text;c.lineWidth=1.2;c.beginPath();c.arc(F.X(x),F.Y(y),9,0,TAU);c.stroke();c.font='600 12px "IBM Plex Sans",sans-serif';c.fillStyle=COL.text;c.textAlign='left';c.textBaseline='middle';c.fillText(f.name,F.X(x)+12,F.Y(y));}
+    F.unclip();}
+  function card(fi){const el=$('#ex-card');if(fi<0){el.innerHTML='<h3>Pick a family</h3><p class="hint">Choose from the list or click any coloured point.</p>';return;}const f=FAM[fi];
+    el.innerHTML=`<h3><span class="swatch" style="background:${f.col}"></span>${f.name} family</h3><div class="hint">Named after (${f.num}) ${f.name.split('–')[0]} · ${f.zone}</div>
+    <dl><dt>Proper a</dt><dd>${f.a.toFixed(2)} AU</dd><dt>Proper e</dt><dd>${f.e.toFixed(3)}</dd><dt>Proper sin i</dt><dd>${f.s.toFixed(3)} (i ≈ ${(Math.asin(f.s)/DEG).toFixed(1)}°)</dd><dt>Type</dt><dd>${TAX[f.tax].n}</dd><dt>Members</dt><dd>≈${f.mem.toLocaleString()}</dd><dt>Age</dt><dd>${f.age}</dd></dl><p style="margin:0">${f.note}</p>`;}
+  function select(fi){sel=fi;card(fi);$$('#ex-list .chip').forEach((b,j)=>b.classList.toggle('sel',j===fi));draw();}
+  const list=$('#ex-list');FAM.forEach((f,fi)=>{const b=document.createElement('button');b.className='chip';b.innerHTML=`<i style="background:${f.col}"></i>${f.name}`;b.onclick=()=>select(sel===fi?-1:fi);list.appendChild(b);});
+  const tl=$('#ex-taxlegend');Object.values(TAX).forEach(t=>{const s=document.createElement('span');s.className='chip';s.style.cursor='default';s.innerHTML=`<i style="background:${t.c}"></i>${t.n}`;tl.appendChild(s);});
+  segBind($$('[data-ax]'),b=>{ax=b.dataset.ax;draw();});
+  segBind($$('[data-col]'),b=>{col=b.dataset.col;tl.hidden=col!=='tax';draw();});
+  $('#ex-clear').onclick=()=>select(-1);
+  cv.addEventListener('click',ev=>{const bb=cv.getBoundingClientRect();const px=ev.clientX-bb.left,py=ev.clientY-bb.top;if(!F.inside(px,py))return;let best=-1,bd=64;for(let i=0;i<BELT.N;i++){if(BELT.F[i]<0)continue;const[x,y]=xy(i);const dx=F.X(x)-px,dy=F.Y(y)-py,d=dx*dx+dy*dy;if(d<bd){bd=d;best=i;}}select(best>=0?BELT.F[best]:-1);});
+  onResize(cv,()=>{F.fit();draw();});draw();
+  return {select};})();
+
+/* families table */
+(()=>{const cols=[['Family','name'],['Zone','zone'],['a (AU)','a',1],['e','e',1],['sin i','s',1],['Type','tax'],['≈ Members','mem',1],['Age','age']];
+  const th=$('#fam-table thead'),tb=$('#fam-table tbody');let key='a',dir=1;
+  th.innerHTML='<tr>'+cols.map(([l,k,n])=>`<th class="${n?'num':''}" data-k="${k}" aria-sort="${k===key?'ascending':'none'}" tabindex="0">${l}</th>`).join('')+'</tr>';
+  function render(){const rows=FAM.map((f,i)=>({f,i})).sort((x,y)=>{const A=x.f[key],B=y.f[key];return (typeof A==='number'?A-B:String(A).localeCompare(String(B)))*dir;});
+    tb.innerHTML=rows.map(({f,i})=>`<tr data-i="${i}" style="cursor:pointer"><td><span class="swatch" style="background:${f.col}"></span>${f.name}</td><td>${f.zone}</td><td class="num">${f.a.toFixed(2)}</td><td class="num">${f.e.toFixed(3)}</td><td class="num">${f.s.toFixed(3)}</td><td>${f.tax}</td><td class="num">${f.mem.toLocaleString()}</td><td>${f.age}</td></tr>`).join('');
+    $$('#fam-table th').forEach(h=>h.setAttribute('aria-sort',h.dataset.k===key?(dir>0?'ascending':'descending'):'none'));}
+  $$('#fam-table th').forEach(h=>{const go=()=>{if(key===h.dataset.k)dir=-dir;else{key=h.dataset.k;dir=1;}render();};h.onclick=go;h.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
+  tb.addEventListener('click',e=>{const tr=e.target.closest('tr');if(!tr)return;EXP.select(+tr.dataset.i);document.getElementById('explorer').scrollIntoView({behavior:reduceMotion?'auto':'smooth'});});
+  render();})();
+
+/* ---------- 05 HCM ---------- */
+(()=>{const cv=$('#hcm-canvas');const F=new Frame(cv,{aspect:.62,maxH:520});const r=mulberry32(4242),g=gaussFn(r);
+  const TF=[{n:'Koronis',a:2.88,e:.047,s:.036,sa:.025,se:.006,ss:.004,k:300,c:'#ff7a7a'},{n:'Eos',a:3.03,e:.075,s:.17,sa:.04,se:.01,ss:.007,k:380,c:'#b48cff'},{n:'Themis',a:3.14,e:.155,s:.02,sa:.04,se:.011,ss:.006,k:300,c:'#3fc1ff'},{n:'Hygiea',a:3.14,e:.13,s:.09,sa:.035,se:.009,ss:.005,k:260,c:'#44e0a8'},{n:'Veritas',a:3.17,e:.062,s:.157,sa:.007,se:.004,ss:.003,k:90,c:'#ffd1a1'}];
+  const A=[],E=[],S=[],TR=[];
+  while(A.length<4500){const a=2.83+r()*.43,e=Math.abs(.12+.07*g()),s=Math.abs(.1+.08*g());if(e>.3||s>.32||inGap(a,e))continue;A.push(a);E.push(e);S.push(s);TR.push(-1);}
+  TF.forEach((f,fi)=>{let k=0;while(k<f.k){const a=f.a+.55*f.sa*g(),e=Math.abs(f.e+.55*f.se*g()),s=Math.abs(f.s+.55*f.ss*g());if(inGap(a,e)||a<2.83||a>3.26)continue;A.push(a);E.push(e);S.push(s);TR.push(fi);k++;}});
+  const N=A.length,VMAX=265;const ei=[],ej=[],ed=[];
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const am=(A[i]+A[j])/2,da=(A[i]-A[j])/am;if(Math.abs(da)>.02)continue;const de=E[i]-E[j],ds=S[i]-S[j];const d=29780/Math.sqrt(am)*Math.sqrt(1.25*da*da+2*de*de+2*ds*ds);if(d<VMAX){ei.push(i);ej.push(j);ed.push(d);}}
+  const ord=ed.map((_,k)=>k).sort((x,y)=>ed[x]-ed[y]);
+  const PAL=['#ff7a7a','#b48cff','#3fc1ff','#44e0a8','#ffd1a1','#ffe066','#ff9f5a','#7fdc9b','#f0a0ff','#c4e35a','#8fd3ff','#ff6fd8'];
+  let vc=70,proj='ae',truth=false,lab=new Int32Array(N),groups=[];
+  function cluster(){const par=new Int32Array(N);for(let i=0;i<N;i++)par[i]=i;const find=x=>{while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;};
+    for(const k of ord){if(ed[k]>vc)break;const a=find(ei[k]),b=find(ej[k]);if(a!==b)par[a]=b;}
+    const sz=new Map();for(let i=0;i<N;i++){const p=find(i);sz.set(p,(sz.get(p)||0)+1);}
+    const big=[...sz.entries()].filter(([,s])=>s>=15).sort((x,y)=>y[1]-x[1]);const gid=new Map(big.map(([p],k)=>[p,k]));
+    for(let i=0;i<N;i++){const p=find(i);lab[i]=gid.has(p)?gid.get(p):-1;}groups=big.map(([,s])=>s);
+    $('#hcm-n').textContent=groups.length;$('#hcm-big').textContent=groups.length?groups[0]+' bodies':'–';
+    const tb=$('#hcm-table tbody');tb.innerHTML=TF.map((f,fi)=>{const tot=TR.filter(x=>x===fi).length;const cnt=new Map();for(let i=0;i<N;i++)if(TR[i]===fi&&lab[i]>=0)cnt.set(lab[i],(cnt.get(lab[i])||0)+1);let bg=-1,bc=0;cnt.forEach((v,k)=>{if(v>bc){bc=v;bg=k;}});
+      const found=bg>=0?bc/tot:0;const inter=bg>=0?(groups[bg]-bc)/groups[bg]:0;const warn=inter>.5?' style="color:#ff8a8a"':'';
+      return `<tr><td><span class="swatch" style="background:${f.c}"></span>${f.n}</td><td class="num">${(found*100).toFixed(0)}%</td><td class="num"${warn}>${bg>=0?(inter*100).toFixed(0)+'%':'–'}</td></tr>`;}).join('');}
+  function draw(){F.dom([2.82,3.27],proj==='ae'?[0,.3]:[0,.32]);F.axes('Proper a (AU)',proj==='ae'?'Proper e':'Proper sin i');const c=F.ctx;F.clip();
+    for(let i=0;i<N;i++){const y=proj==='ae'?E[i]:S[i];let colr,al;if(truth){colr=TR[i]>=0?TF[TR[i]].c:'#7d8499';al=TR[i]>=0?.85:.45;}else{colr=lab[i]>=0?PAL[lab[i]%PAL.length]:'#7d8499';al=lab[i]>=0?.85:.4;}c.fillStyle=colr;c.globalAlpha=al;c.fillRect(F.X(A[i])-1,F.Y(y)-1,2,2);}
+    c.globalAlpha=1;F.unclip();}
+  $('#hcm-v').oninput=e=>{vc=+e.target.value;$('#hcm-vv').textContent=vc+' m/s';cluster();draw();};
+  segBind($$('[data-hp]'),b=>{proj=b.dataset.hp;draw();});
+  segBind([$('#hcm-found'),$('#hcm-truth')],b=>{truth=b.id==='hcm-truth';draw();});
+  onResize(cv,()=>{F.fit();draw();});cluster();draw();})();
+
+/* ---------- 06 YARKOVSKY ---------- */
+(()=>{const cv=$('#yk-canvas');const F=new Frame(cv,{aspect:.62,maxH:520});const r=mulberry32(77),g=gaussFn(r);const N=1400,ac=2.40,K=3e-4,L=2.20,Rr=2.50;
+  const D=new Float32Array(N),c0=new Float32Array(N),a0=new Float32Array(N);
+  for(let i=0;i<N;i++){D[i]=0.5*Math.pow(r(),-1/1.6);if(D[i]>20){i--;continue;}c0[i]=r()*2-1;a0[i]=ac+.006*g()*Math.pow(5/D[i],.3);}
+  let age=400,playing=false,raf;
+  function aAt(i,t){const tau=150*D[i]*D[i];const s=Math.sign(c0[i])||1,m=Math.abs(c0[i]);const integ=s*(t-(1-m)*tau*(1-Math.exp(-t/tau)));return a0[i]+K/D[i]*integ;}
+  function draw(){F.dom([2.12,2.58],[0,2.05]);F.axes('Semimajor axis a (AU)','1 / D  (km⁻¹)');const c=F.ctx;F.clip();
+    c.fillStyle='rgba(255,107,107,.08)';c.fillRect(F.X(2.12),F.t,F.X(L)-F.X(2.12),F.ph);c.fillRect(F.X(Rr),F.t,F.X(2.58)-F.X(Rr),F.ph);
+    c.font='11px "IBM Plex Mono",monospace';c.fillStyle='#ff8a8a';c.textAlign='center';c.textBaseline='top';c.fillText('ν6',F.X(2.16),F.t+4);c.fillText('3:1',F.X(2.54),F.t+4);
+    let nin=0,n31=0,n6=0;
+    for(let i=0;i<N;i++){let a=aAt(i,age);let lost=0;if(a>=Rr){lost=1;n31++;}else if(a<=L){lost=2;n6++;}else nin++;
+      if(lost)continue;c.fillStyle=COL.accent;c.globalAlpha=.8;c.fillRect(F.X(a)-1.1,F.Y(1/D[i])-1.1,2.2,2.2);}
+    c.globalAlpha=1;
+    if(age>0){c.strokeStyle='rgba(232,235,244,.7)';c.setLineDash([5,4]);c.lineWidth=1.2;c.beginPath();for(const sgn of[-1,1]){for(let k=0;k<=60;k++){const y=k/60*2.05;const a=ac+sgn*K*age*y;const X=F.X(a),Y=F.Y(y);k?c.lineTo(X,Y):c.moveTo(X,Y);}}c.stroke();c.setLineDash([]);}
+    F.unclip();$('#yk-in').textContent=nin;$('#yk-31').textContent=n31;$('#yk-n6').textContent=n6;$('#yk-agev').textContent=age+' Myr';}
+  const sl=$('#yk-age');sl.oninput=e=>{age=+e.target.value;draw();};
+  $('#yk-play').onclick=()=>{playing=!playing;$('#yk-play').textContent=playing?'Pause':'Play';if(playing){if(age>=2500)age=0;let last=performance.now();(function step(ts){if(!playing)return;age=Math.min(2500,age+(ts-last)*.4);last=ts;age=Math.round(age);sl.value=age;draw();if(age>=2500){playing=false;$('#yk-play').textContent='Play';return;}raf=requestAnimationFrame(step);})(last);}};
+  onResize(cv,()=>{F.fit();draw();});draw();})();
+
+/* ---------- 07 NEA ---------- */
+const SRC=[{k:'nu6',label:'ν6 resonance',col:'#ff6b6b',f:[39,49,38]},{k:'r31',label:'3:1 resonance',col:'#ffd166',f:[19,31,36]},{k:'r52',label:'5:2 resonance',col:'#4fc3f7',f:[17,12,0.1]},{k:'hun',label:'Hungaria region',col:'#7bd88f',f:[11,5,24]},{k:'pho',label:'Phocaea region',col:'#c792ea',f:[7,3,0.02]},{k:'r21',label:'2:1 resonance',col:'#f78c6c',f:[5,2,0.1]},{k:'jfc',label:'Jupiter-family comets',col:'#a0a8c0'}];
+const SRCI=Object.fromEntries(SRC.map((s,i)=>[s.k,i]));
+const NAMED=[
+ {n:'Bennu',a:1.126,e:.204,i:6.03,d:'B-type rubble pile sampled by OSIRIS-REx; likely from the Polana or Eulalia family.'},
+ {n:'Ryugu',a:1.190,e:.191,i:5.87,d:'Cb-type, sampled by Hayabusa2; a close relative of Bennu.'},
+ {n:'Itokawa',a:1.324,e:.280,i:1.62,d:'S-type peanut-shaped rubble pile, sampled by Hayabusa; LL-chondrite material.'},
+ {n:'Eros',a:1.458,e:.223,i:10.83,d:'S-type, about 34 km long, orbited by NEAR Shoemaker; the first NEA found (1898).'},
+ {n:'Apophis',a:.922,e:.191,i:3.34,d:'Passes about 32,000 km from Earth on 13 April 2029.'},
+ {n:'Didymos',a:1.643,e:.384,i:3.41,d:'Binary with moon Dimorphos, target of DART (2022) and ESA\'s Hera.'},
+ {n:'Phaethon',a:1.271,e:.890,i:22.3,d:'Parent of the Geminid meteor shower; heated to ~1,000 K at perihelion.'},
+ {n:'Ganymed',a:2.665,e:.533,i:26.7,d:'The largest NEA, about 35 km across.'},
+ {n:'2024 YR4',a:2.516,e:.661,i:3.41,d:'Briefly rated the highest-risk asteroid in early 2025 before Earth impact was ruled out.'},
+ {n:"'Ayló'chaxnim",a:.555,e:.177,i:15.9,d:'First known Vatira: its whole orbit lies inside Venus\'s.'}
+];
+const NEA=(()=>{const P=genNEA(900,31);const vis=SRC.map(()=>true);let state={a:1.126,e:.204,i:6};let jr=null;
+  const cv=$('#nea-canvas');const F=new Frame(cv,{aspect:.66,maxH:560});
+  function region(c,fn,col){c.fillStyle=col;c.beginPath();let first=true;for(let a=.5;a<=3.5;a+=.005){const v=fn(a);if(!v)continue;const X=F.X(a),Y=F.Y(v[1]);if(first){c.moveTo(X,Y);first=false;}else c.lineTo(X,Y);}for(let a=3.5;a>=.5;a-=.005){const v=fn(a);if(!v)continue;c.lineTo(F.X(a),F.Y(v[0]));}c.closePath();c.fill();}
+  function draw(){F.dom([.5,3.5],[0,1]);F.axes('Semimajor axis a (AU)','Eccentricity e');const c=F.ctx;F.clip();
+    region(c,a=>a<.983?[0,Math.max(0,.983/a-1)]:null,'rgba(199,146,234,.10)');
+    region(c,a=>a<=1?[Math.max(0,.983/a-1),1]:null,'rgba(255,209,102,.08)');
+    region(c,a=>a>=1?[Math.max(0,1-1.017/a),1]:null,'rgba(255,107,107,.08)');
+    region(c,a=>a>=1.017?[Math.max(0,1-1.3/a),1-1.017/a]:null,'rgba(123,216,143,.10)');
+    const curve=(fn,a0,a1,colr,dash)=>{c.strokeStyle=colr;c.lineWidth=1.4;c.setLineDash(dash||[]);c.beginPath();let st=true;for(let a=a0;a<=a1;a+=.005){const e=fn(a);if(e<0||e>1){st=true;continue;}const X=F.X(a),Y=F.Y(e);st?c.moveTo(X,Y):c.lineTo(X,Y);st=false;}c.stroke();c.setLineDash([]);};
+    curve(a=>1-1.3/a,1.3,3.5,'#ff5c5c');curve(a=>1-1.017/a,1.017,3.5,'#ffb35c',[6,4]);curve(a=>.983/a-1,.5,.983,'#c792ea');
+    c.strokeStyle='rgba(232,235,244,.4)';c.setLineDash([2,4]);c.beginPath();c.moveTo(F.X(1),F.t);c.lineTo(F.X(1),F.t+F.ph);c.stroke();
+    c.font='10.5px "IBM Plex Mono",monospace';c.textAlign='center';c.textBaseline='top';['3:1','5:2','2:1'].forEach(k=>{const X=F.X(RESMAP[k].a);c.strokeStyle='rgba(127,182,255,.5)';c.beginPath();c.moveTo(X,F.t+14);c.lineTo(X,F.t+F.ph);c.stroke();c.fillStyle=COL.accent2;c.fillText(k,X,F.t+2);});c.setLineDash([]);
+    c.font='600 11px "IBM Plex Sans",sans-serif';c.textAlign='center';c.textBaseline='middle';
+    c.fillStyle='#d6b3f2';c.fillText('ATIRA',F.X(.72),F.Y(.12));c.fillStyle='#ffe08a';c.fillText('ATEN',F.X(.8),F.Y(.75));c.fillStyle='#ff9a9a';c.fillText('APOLLO',F.X(2.1),F.Y(.86));c.fillStyle='#9ef0b0';c.save();c.translate(F.X(2.9),F.Y(1-1.16/2.9));c.rotate(-.14);c.fillText('AMOR',0,0);c.restore();
+    c.fillStyle='#ff8a8a';c.font='10.5px "IBM Plex Mono",monospace';c.textAlign='left';c.fillText('q = 1.3 AU',F.X(3.0),F.Y(1-1.3/3.0)+12);
+    for(let i=0;i<P.N;i++){const si=SRCI[P.src[i]];if(!vis[si])continue;c.fillStyle=SRC[si].col;c.globalAlpha=jr?.25:.75;c.fillRect(F.X(P.a[i])-1.2,F.Y(P.e[i])-1.2,2.4,2.4);}c.globalAlpha=1;
+    c.font='10.5px "IBM Plex Sans",sans-serif';NAMED.forEach(o=>{if(o.a<.5||o.a>3.5)return;const X=F.X(o.a),Y=F.Y(o.e);c.strokeStyle='#ffffff';c.lineWidth=1;c.beginPath();c.arc(X,Y,3.5,0,TAU);c.stroke();c.fillStyle='#e8ebf4';c.textAlign='left';c.fillText(o.n,X+5,Y-6);});
+    if(state.a>=.5&&state.a<=3.5){const X=F.X(state.a),Y=F.Y(state.e);c.strokeStyle='#fff';c.lineWidth=1.6;c.beginPath();c.moveTo(X-8,Y);c.lineTo(X+8,Y);c.moveTo(X,Y-8);c.lineTo(X,Y+8);c.stroke();}
+    if(jr){c.strokeStyle=COL.accent;c.lineWidth=1.6;c.beginPath();for(let k=0;k<=jr.k&&k<jr.path.length;k++){const[a,e]=jr.path[k];const X=F.X(a),Y=F.Y(e);k?c.lineTo(X,Y):c.moveTo(X,Y);}c.stroke();const p=jr.path[Math.min(jr.k,jr.path.length-1)];c.fillStyle='#fff';c.beginPath();c.arc(F.X(p[0]),F.Y(p[1]),4.5,0,TAU);c.fill();}
+    F.unclip();}
+  const chips=$('#nea-src');SRC.forEach((s,i)=>{const b=document.createElement('button');b.className='chip';b.setAttribute('aria-pressed','true');b.innerHTML=`<i style="background:${s.col}"></i>${s.label}`;b.onclick=()=>{vis[i]=!vis[i];b.setAttribute('aria-pressed',vis[i]);draw();};chips.appendChild(b);});
+  // journey
+  function makePath(){const r=mulberry32(11),g=gaussFn(r);const p=[];let a=2.40,e=.14;
+    for(let k=0;k<150;k++){a+=(2.497-2.40)/150;p.push([a,clamp(.14+.004*g(),0,1),0]);}
+    let ph=0;for(let k=0;k<190;k++){ph+=.28;const f=k/189;e=.14+(.64-.14)*f+.05*Math.sin(ph)*f+.005*g();a=2.501+.004*Math.sin(ph*.7)+.0015*g();p.push([a,clamp(e,0,.95),1]);}
+    let q=a*(1-e);for(let k=0;k<230;k++){a=clamp(a-.004+.02*g(),1.15,2.7);q=clamp(q-.0012+.012*g(),.55,1.0);e=1-q/a;p.push([a,e,2]);}
+    for(let k=0;k<90;k++){q=q*(1-.045);e=1-q/a;p.push([a,clamp(e,0,.995),3]);}return p;}
+  const PATH=makePath();
+  $('#jr-play').onclick=()=>{if(jr&&jr.run){jr.run=false;$('#jr-play').textContent='Play: journey of a fragment';return;}jr={path:PATH,k:0,run:true};$('#jr-play').textContent='Stop';let last=performance.now();
+    (function step(ts){if(!jr||!jr.run)return;jr.k+=Math.max(1,Math.round((ts-last)/16));last=ts;const st=PATH[Math.min(jr.k,PATH.length-1)][2];$$('#jr-steps li').forEach((li,j)=>li.classList.toggle('on',j===st));draw();
+      if(jr.k>=PATH.length-1){jr.run=false;$('#jr-play').textContent='Replay journey';return;}requestAnimationFrame(step);})(last);};
+  onResize(cv,()=>{F.fit();draw();});draw();
+  return {set(a,e,i){state={a,e,i};draw();}};})();
+
+/* bars */
+(()=>{let h=0;const el=$('#src-bars');function render(){el.innerHTML=SRC.filter(s=>s.f).map(s=>`<div class="bar"><span>${s.label}</span><div class="track"><div class="fill" style="width:${s.f[h]/50*100}%;background:${s.col}"></div></div><span class="v">${s.f[h]<1?s.f[h]:s.f[h]}%</span></div>`).join('');}
+  segBind($$('[data-h]'),b=>{h=+b.dataset.h;render();});render();})();
+
+/* classifier */
+(()=>{const cv=$('#orb-canvas');let ctx,W,H,ph=0;const sa=$('#orb-a'),se=$('#orb-e'),si=$('#orb-i');let nameSel='Bennu';
+  const pre=$('#nea-presets');NAMED.forEach(o=>{const b=document.createElement('button');b.className='btn';b.textContent=o.n;b.onclick=()=>{sa.value=o.a;se.value=o.e;si.value=o.i;nameSel=o.n;update();};pre.appendChild(b);});
+  function fit(){const dpr=window.devicePixelRatio||1;W=cv.clientWidth||400;H=Math.round(clamp(W*.85,280,480));cv.style.height=H+'px';cv.width=W*dpr;cv.height=H*dpr;ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+  function classify(a,e,i){const q=a*(1-e),Q=a*(1+e);
+    if(Q<.307)return['Inside Mercury','A hypothetical "vulcanoid" orbit. None have been found; searches have ruled out bodies larger than a few km.'];
+    if(Q<.718)return['Vatira','Entirely inside Venus\'s orbit. Only one is known so far.'];
+    if(Q<.983)return['Atira','Entirely inside Earth\'s orbit; never crosses it. Seen only in twilight.'];
+    if(a<1)return['Aten','Earth-crossing with a period under a year; spends most time inside Earth\'s orbit.'];
+    if(q<1.017)return['Apollo','Earth-crossing with a period over a year. Most hazardous asteroids are Apollos.'];
+    if(q<1.3)return['Amor','Approaches Earth from outside without crossing its orbit. Still counts as a NEA.'];
+    if(q<1.666)return['Mars-crosser','Not a NEA, but its orbit crosses Mars\'s. Mars encounters can push it into near-Earth space.'];
+    const T=AJ/a+2*Math.cos(i*DEG)*Math.sqrt(a/AJ*(1-e*e));
+    if(T<3&&Q>4.5)return['Comet-like orbit','Tisserand parameter below 3 with aphelion near Jupiter: a Jupiter-family-comet-type orbit.'];
+    if(a<2.06)return['Hungaria zone','Stable only because of high inclination; low-inclination orbits here would cross Mars.'];
+    if(a<2.5)return['Inner main belt','Between the ν6 resonance and the 3:1 Kirkwood gap.'];
+    if(a<2.825)return['Middle main belt','Between the 3:1 and 5:2 Kirkwood gaps.'];
+    if(a<2.96)return['Pristine zone','Between 5:2 and 7:3; the Koronis family lives here.'];
+    if(a<3.28)return['Outer main belt','Between 7:3 and the 2:1 resonance.'];
+    if(a<3.75)return['Cybele zone','Beyond the 2:1, out to about the 5:3 and 7:4 resonances.'];
+    if(a>3.85&&a<4.1)return['Hilda zone','Near the 3:2 resonance with Jupiter.'];
+    if(a>5.05&&a<5.35)return['Trojan zone','Co-orbital with Jupiter; stable only near L4 or L5.'];
+    return['Unstable gap','Few asteroids survive long here; Jupiter perturbations are strong.'];}
+  function update(){const a=+sa.value,e=+se.value,i=+si.value;const q=a*(1-e),Q=a*(1+e);const T=AJ/a+2*Math.cos(i*DEG)*Math.sqrt(a/AJ*(1-e*e));const[c,d]=classify(a,e,i);
+    $('#orb-class').textContent=c;$('#orb-q').textContent=q.toFixed(3)+' AU';$('#orb-Q').textContent=Q.toFixed(3)+' AU';const P=Math.pow(a,1.5);$('#orb-P').textContent=P<1?(P*365.25).toFixed(0)+' d':P.toFixed(2)+' yr';$('#orb-T').textContent=T.toFixed(2);
+    const nm=NAMED.find(o=>o.n===nameSel&&Math.abs(o.a-a)<.003&&Math.abs(o.e-e)<.003);$('#orb-name').textContent=nm?nm.n:'custom orbit';$('#orb-desc').textContent=(nm?nm.d+' ':'')+d;NEA.set(a,e,i);draw();}
+  function draw(){if(!ctx)return;const a=+sa.value,e=+se.value;ctx.fillStyle='#070a14';ctx.fillRect(0,0,W,H);const cx=W/2,cy=H/2;const Q=a*(1+e);const R=Math.max(Q,1.65)*1.06;const sc=(Math.min(W,H)/2-10)/R;
+    // ellipse offset: focus at sun, perihelion to the right
+    [['Mercury',.387,'#b7b2a8'],['Venus',.723,'#f0d9a6'],['Earth',1,'#6fb6ff'],['Mars',1.524,'#ff7a52'],['Jupiter',5.203,'#f2c27a']].forEach(([n,r,c])=>{if(r>R)return;ctx.strokeStyle=c;ctx.globalAlpha=.55;ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,r*sc,0,TAU);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=c;ctx.font='10.5px "IBM Plex Sans",sans-serif';ctx.textAlign='center';ctx.fillText(n,cx,cy-r*sc-3);});
+    ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(cx,cy,5,0,TAU);ctx.fill();
+    const b=a*Math.sqrt(1-e*e);ctx.strokeStyle=COL.accent;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(cx-a*e*sc,cy,a*sc,b*sc,0,0,TAU);ctx.stroke();
+    const qx=cx+a*(1-e)*sc,Qx=cx-a*(1+e)*sc;ctx.fillStyle=COL.text;ctx.font='10.5px "IBM Plex Mono",monospace';ctx.textAlign='left';ctx.beginPath();ctx.arc(qx,cy,3,0,TAU);ctx.fill();ctx.fillText('q',qx+5,cy+12);ctx.textAlign='right';ctx.beginPath();ctx.arc(Qx,cy,3,0,TAU);ctx.fill();ctx.fillText('Q',Qx-5,cy+12);
+    const M=ph;let E=M;for(let k=0;k<8;k++)E=E-(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));const X=cx+a*(Math.cos(E)-e)*sc,Y=cy-b*Math.sin(E)*sc;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(X,Y,4,0,TAU);ctx.fill();}
+  let last=0;function loop(ts){const dt=last?(ts-last)/1000:0;last=ts;if(!reduceMotion){ph=(ph+dt*TAU/(Math.pow(+sa.value,1.5)*4))%TAU;draw();}requestAnimationFrame(loop);}
+  [sa,se,si].forEach(s=>s.oninput=()=>{update();});
+  onResize(cv,fit);fit();update();requestAnimationFrame(loop);})();
+</script>
+</body>
+</html>
